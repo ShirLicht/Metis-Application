@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/architects_daughter</item>
+        <item>@font/bungee_shade</item>
+        <item>@font/comfortaa_light</item>
+        <item>@font/luckiest_guy</item>
+        <item>@font/monoton</item>
+        <item>@font/ranchers</item>
+    </array>
+</resources>
