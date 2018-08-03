@@ -23,17 +23,20 @@ import java.util.Map;
 
 public class NonAlcoDrinksFragment extends Fragment {
 
-    private  final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
-    private DatabaseReference mRef,mref1;
+    private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
+    private DatabaseReference mRef;
     private ArrayList<String> foodList = new ArrayList<>();
     private ListView listView;
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
-        // listView = getActivity().findViewById(R.id.listView);
         View view = inflater.inflate(R.layout.fragment_non_alco_drinks, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
@@ -84,6 +87,7 @@ public class NonAlcoDrinksFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
 
         //DatabaseReference mRefChild = mRef.child("maor");

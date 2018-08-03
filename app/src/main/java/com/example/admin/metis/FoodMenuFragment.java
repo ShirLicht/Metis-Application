@@ -22,19 +22,22 @@ import java.util.Map;
 
 public class FoodMenuFragment extends Fragment {
 
-    private  final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Food";
-    private DatabaseReference mRef,mref1;
+    private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Food";
+    private DatabaseReference mRef;
     private ArrayList<String> foodList = new ArrayList<>();
     private ListView listView;
 
 
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
-       // listView = getActivity().findViewById(R.id.listView);
+
         View view = inflater.inflate(R.layout.fragment_food_menu, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
