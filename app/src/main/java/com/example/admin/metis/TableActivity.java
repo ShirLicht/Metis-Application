@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class BarMActivity extends AppCompatActivity {
+public class TableActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,7 +40,7 @@ public class BarMActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bar_m);
+        setContentView(R.layout.activity_table);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,13 +57,22 @@ public class BarMActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bar_m, menu);
+        getMenuInflater().inflate(R.menu.menu_table, menu);
         return true;
     }
 
@@ -110,7 +119,7 @@ public class BarMActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_bar_m, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_table, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
@@ -131,7 +140,7 @@ public class BarMActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             Fragment fragment = null;
 
-            switch (position) {
+            switch (position){
                 case 0:
                     fragment = new FoodMenuFragment();
                     break;
@@ -152,5 +161,10 @@ public class BarMActivity extends AppCompatActivity {
             return 3;
         }
 
+
+
+
     }
+
+
 }
