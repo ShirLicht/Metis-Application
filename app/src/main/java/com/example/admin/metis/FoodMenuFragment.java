@@ -25,24 +25,26 @@ public class FoodMenuFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-    ArrayList<Product> productsList = new ArrayList<>();
-    private boolean flag = false;
+    ArrayList<Product> productsList;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+        //productsList = new ArrayList<>();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_food_menu, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                 String foodType = dataSnapshot.getKey();
                 productsList.add(new Product(foodType," "));
                 Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();

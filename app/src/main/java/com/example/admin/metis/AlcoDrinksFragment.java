@@ -26,7 +26,7 @@ public class AlcoDrinksFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-    ArrayList<Product> productsList = new ArrayList<>();
+    ArrayList<Product> productsList;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -37,6 +37,7 @@ public class AlcoDrinksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_alco_drinks, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
@@ -75,9 +76,6 @@ public class AlcoDrinksFragment extends Fragment {
 
             }
         });
-
-        //DatabaseReference mRefChild = mRef.child("maor");
-        //mRefChild.setValue("pitta");
 
         return view;
     }

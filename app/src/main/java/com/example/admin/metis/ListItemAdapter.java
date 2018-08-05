@@ -51,6 +51,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
             nameTextView.setTextColor(Color.BLACK);
             TextView priceTextView = (TextView)listItem.findViewById(R.id.list_item_price);
             priceTextView.setText(currentItem.getPrice());
+            priceTextView.setTextColor(Color.BLACK);
         }
 
         return listItem;

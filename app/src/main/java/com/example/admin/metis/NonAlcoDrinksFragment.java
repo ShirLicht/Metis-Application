@@ -27,8 +27,7 @@ public class NonAlcoDrinksFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-    ArrayList<Product> productsList = new ArrayList<>();
-    private boolean flag = false;
+    ArrayList<Product> productsList;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -39,6 +38,7 @@ public class NonAlcoDrinksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_non_alco_drinks, container, false);
 
         listView = (ListView) view.findViewById(R.id.listView);
