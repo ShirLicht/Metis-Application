@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     private GPSTrackerService gps_tracker;
-    private  LoginButton loginButton;
+    private LoginButton loginButton;
 
 
     protected void onCreate(Bundle savedInstanceState) {
