@@ -30,7 +30,6 @@ public class FoodMenuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
-        //productsList = new ArrayList<>();
     }
 
     @Nullable
