@@ -1,7 +1,10 @@
 package com.example.admin.metis;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,15 +32,16 @@ public class MainActivity extends AppCompatActivity {
     final private String  TAG = "MainActivity";
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
+    private GPSTrackerService gps_tracker;
+    private  LoginButton loginButton;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
+        bindUI();
 
-        btn = (Button) findViewById(R.id.idButton);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 Intent intent = new Intent(MainActivity.this,MenuActivity.class );
@@ -45,9 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize Facebook Login button
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
+
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -82,11 +84,56 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if (!gps_tracker.isGPSEnable()) {
+            showSettingsAlert();
+        }
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             updateUI();
         }
+    }
+
+    private void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("GPS is settings");
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                finish();
+            }
+        });
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void bindUI(){
+        mAuth = FirebaseAuth.getInstance();
+
+        btn = (Button) findViewById(R.id.idButton);
+
+        gps_tracker = new GPSTrackerService(this);
+
+        // Initialize Facebook Login button
+        mCallbackManager = CallbackManager.Factory.create();
+        loginButton = findViewById(R.id.login_button);
     }
 
     public void updateUI(){
