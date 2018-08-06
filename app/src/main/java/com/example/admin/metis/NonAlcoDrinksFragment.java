@@ -23,46 +23,39 @@ import java.util.Map;
 
 public class NonAlcoDrinksFragment extends Fragment {
 
-    private  final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
-    private DatabaseReference mRef,mref1;
-    private ArrayList<String> foodList = new ArrayList<>();
+    private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
+    private DatabaseReference mRef;
     private ListView listView;
+    private ListItemAdapter listItemAdapter;
+    ArrayList<Product> productsList;
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
-        // listView = getActivity().findViewById(R.id.listView);
+        productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_non_alco_drinks, container, false);
-        listView = (ListView) view.findViewById(R.id.listView);
 
-        final ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, foodList );
-        //final ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, foodList );
-        // listView.setAdapter(arrayAdapter);
+        listView = (ListView) view.findViewById(R.id.listView);
 
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String foodType = dataSnapshot.getKey();
-                foodList.add(foodType);
-
-                listView.setAdapter(arrayAdapter1);
-                arrayAdapter1.notifyDataSetChanged();
-
+                productsList.add(new Product(foodType," "));
                 Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();
-                String dish;
-                listView.setAdapter(arrayAdapter1);
 
-                for(String key : map.keySet()){
-                    dish =  key + "           " + map.get(key);
-                    foodList.add(dish);
-                    arrayAdapter1.notifyDataSetChanged();
-                }
+                for(String key : map.keySet())
+                    productsList.add(new Product(key, (String)map.get(key)));
 
-                foodList.add(" ");
-                arrayAdapter1.notifyDataSetChanged();
-
+                listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList);
+                listView.setAdapter(listItemAdapter);
+                listItemAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -84,10 +77,8 @@ public class NonAlcoDrinksFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
 
-        //DatabaseReference mRefChild = mRef.child("maor");
-        //mRefChild.setValue("pitta");
+        });
 
         return view;
     }
