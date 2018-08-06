@@ -9,7 +9,7 @@ import android.widget.Button;
 public class MenuActivity extends AppCompatActivity {
 
    private Button menuBtn, tableBtn, chatBtn;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
