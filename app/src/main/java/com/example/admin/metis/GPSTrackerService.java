@@ -17,11 +17,11 @@ import android.os.Binder;
 
 public class GPSTrackerService extends Service implements LocationListener {
 
-    private static final String TAG = "memory_game:";
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
-    private static final String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
+    private final String TAG = "Metis-Application: ";
+    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
+    private final String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
 
     private final IBinder gpsTrackerBinder = new TheBinder();
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;

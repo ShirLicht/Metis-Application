@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class FoodMenuFragment extends Fragment {
 
+    private final String TAG = "Metis-Application: ";
     private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Food";
     private DatabaseReference mRef;
     private ListView listView;
@@ -38,7 +39,7 @@ public class FoodMenuFragment extends Fragment {
 
         productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_food_menu, container, false);
-        listView = (ListView) view.findViewById(R.id.listView);
+        listView =  view.findViewById(R.id.listView);
 
         mRef.addChildEventListener(new ChildEventListener() {
             @Override

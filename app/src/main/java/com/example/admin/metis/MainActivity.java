@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private Button btn;
-    final private String  TAG = "MainActivity";
+    private final String TAG = "Metis-Application: ";
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     private GPSTrackerService gps_tracker;
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     private void bindUI(){
         mAuth = FirebaseAuth.getInstance();
 
-        btn = (Button) findViewById(R.id.idButton);
+        btn =  findViewById(R.id.idButton);
 
         gps_tracker = new GPSTrackerService(this);
 

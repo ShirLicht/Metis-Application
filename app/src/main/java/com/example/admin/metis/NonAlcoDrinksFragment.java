@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class NonAlcoDrinksFragment extends Fragment {
 
+    private final String TAG = "Metis-Application: ";
     private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
     private DatabaseReference mRef;
     private ListView listView;
@@ -41,7 +42,7 @@ public class NonAlcoDrinksFragment extends Fragment {
         productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_non_alco_drinks, container, false);
 
-        listView = (ListView) view.findViewById(R.id.listView);
+        listView =  view.findViewById(R.id.listView);
 
         mRef.addChildEventListener(new ChildEventListener() {
             @Override

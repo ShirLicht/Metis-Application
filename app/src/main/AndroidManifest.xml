@@ -73,7 +73,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MapActivity"
+            android:label="@string/title_activity_bar_m">
+        </activity>
+        <service android:name=".GPSTrackerService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

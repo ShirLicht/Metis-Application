@@ -23,6 +23,7 @@ import java.util.Map;
 public class AlcoDrinksFragment extends Fragment {
 
     private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Alcoholic_Drinks";
+    private final String TAG = "Metis-Application: ";
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
@@ -39,14 +40,14 @@ public class AlcoDrinksFragment extends Fragment {
 
         productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_alco_drinks, container, false);
-        listView = (ListView) view.findViewById(R.id.listView);
+        listView =  view.findViewById(R.id.listView);
 
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String foodType = dataSnapshot.getKey();
                 productsList.add(new Product(foodType," "));
-                Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();
+                Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
 
                 for(String key : map.keySet())
                     productsList.add(new Product(key, (String)map.get(key)));
