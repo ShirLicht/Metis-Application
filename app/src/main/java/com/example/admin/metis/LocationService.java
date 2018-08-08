@@ -15,15 +15,15 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.os.Binder;
 
-public class GPSTrackerService extends Service implements LocationListener {
+public class LocationService extends Service implements LocationListener {
 
-    private static final String TAG = "memory_game:";
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
-    private static final String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
+    private final String TAG = "Metis-Application: ";
+    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
+    private final String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
 
-    private final IBinder gpsTrackerBinder = new TheBinder();
+    private final IBinder serviceBinder = new TheBinder();
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private final int NETWORK_PERMISSION_REQUEST_CODE = 2525;
 
@@ -31,24 +31,30 @@ public class GPSTrackerService extends Service implements LocationListener {
     private Location location;
     private Activity uiActivity;
 
-    public GPSTrackerService() {
-        Log.i(TAG, "GPSTrackerService default constructor");
+    public LocationService() {
+        Log.i(TAG, "LocationService default constructor");
     }
 
-    public GPSTrackerService(Activity uiActivity) {
+    public LocationService(Activity uiActivity) {
         this.uiActivity = uiActivity;
         initData();
     }
 
+    //Return the interface between the client and the service
     @Override
     public IBinder onBind(Intent intent) {
-        return gpsTrackerBinder;
+        return serviceBinder;
     }
 
+    //the interface between the client and the service
     public class TheBinder extends Binder {
-        GPSTrackerService getService() {
-            return GPSTrackerService.this;
+        LocationService getService() {
+            return LocationService.this;
         }
+    }
+
+    public void setBindActivity(Activity uiActivity){
+        this.uiActivity = uiActivity;
     }
 
     private void initData() {
@@ -74,8 +80,8 @@ public class GPSTrackerService extends Service implements LocationListener {
     }
 
     @SuppressWarnings("MissingPermission")
-    public boolean initDeviceLocation(Activity uiActivity) {
-        this.uiActivity = uiActivity;
+    public boolean initDeviceLocation(){//(Activity uiActivity) {
+       // this.uiActivity = uiActivity;
         initData();
         if(initDeviceLocationByGps()) {
             return true;
@@ -157,7 +163,7 @@ public class GPSTrackerService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG,"onLocationChanged : the device relocation itself");
-        initDeviceLocation(uiActivity);
+        initDeviceLocation();
     }
 
     @Override

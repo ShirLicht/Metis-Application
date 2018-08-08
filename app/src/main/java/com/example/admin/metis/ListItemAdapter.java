@@ -16,6 +16,7 @@ import java.util.List;
 
 public class ListItemAdapter extends ArrayAdapter<Product>{
 
+    private final String TAG = "Metis-Application: ";
     private Context context;
     private List<Product> itemsList = new ArrayList<>();
 
@@ -33,9 +34,9 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
             listItem = LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
 
         Product currentItem = itemsList.get(position);
-        boolean isHeader = currentItem.getPrice() == " " ? true : false;
+        boolean isHeader = currentItem.getPrice().equals(" ") ? true : false;
 
-        TextView nameTextView = (TextView)listItem.findViewById(R.id.list_item_name);
+        TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
 
         if(isHeader){
@@ -49,7 +50,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
             listItem.setPadding(0,0,0,0);
             nameTextView.setTextSize(20);
             nameTextView.setTextColor(Color.BLACK);
-            TextView priceTextView = (TextView)listItem.findViewById(R.id.list_item_price);
+            TextView priceTextView = listItem.findViewById(R.id.list_item_price);
             priceTextView.setText(currentItem.getPrice());
             priceTextView.setTextColor(Color.BLACK);
         }

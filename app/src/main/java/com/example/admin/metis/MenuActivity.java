@@ -8,6 +8,7 @@ import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity {
 
+    private final String TAG = "Metis-Application: ";
    private Button menuBtn, tableBtn, chatBtn;
 //
     @Override
@@ -15,9 +16,9 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        menuBtn = (Button) findViewById(R.id.MenuBtn);
-        tableBtn = (Button) findViewById(R.id.TableBtn);
-        chatBtn = (Button) findViewById(R.id.ChatBtn);
+        menuBtn = findViewById(R.id.MenuBtn);
+        tableBtn =  findViewById(R.id.TableBtn);
+        chatBtn =  findViewById(R.id.ChatBtn);
 
         menuBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
