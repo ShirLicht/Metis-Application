@@ -64,7 +64,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private CircleImageView userProfilePic;
     private SupportMapFragment mapFragment;
     private Activity uiActivity;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
