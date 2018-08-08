@@ -47,8 +47,8 @@ public class NonAlcoDrinksFragment extends Fragment {
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String foodType = dataSnapshot.getKey();
-                productsList.add(new Product(foodType," "));
+                String drinkType = dataSnapshot.getKey();
+                productsList.add(new Product(drinkType," "));
                 Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();
 
                 for(String key : map.keySet())

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -23,16 +24,28 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final float DEFAULT_ZOOM = 14f;
+    private final String[] DB_NODES = {"Name", "Location_Latitude", "Location_Longitude"};
     private final String TAG = "Metis-Application: ";
+    private final String DB_Url = "https://metis-application.firebaseio.com";
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseRef;
     private Button logoutBtn;
     private GoogleMap map;
     private MarkerOptions userMarker;
+    private ArrayList<MarkerOptions> barsMarkersList;
 
     private LocationService locationService;
     private Intent locationServiceIntent;
@@ -43,9 +56,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setContentView(R.layout.activity_map);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+        barsMarkersList = new ArrayList<>();
+
+        //When the user is log in already -> there is no a bar marker
+        obtainBarsMarkersList();
+
         locationService = new LocationService(this);
         bindLocationService();
-       // locationService.initServiceData(this);
 
         logoutBtn = findViewById(R.id.SignOutBtn);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +75,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
 
     }
 
@@ -70,13 +85,33 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
     }
 
+    public void onResume(){
+        super.onResume();
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    public void onBackPressed(){
+        firebaseAuth.signOut();//log out from firebase
+        LoginManager.getInstance().logOut();//log out from facebook
+        Intent intent = new Intent(MapActivity.this,MainActivity.class );
+        startActivity(intent);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         double location_latitude, location_longitude;
+
+      //Add known bars markers
+        for(MarkerOptions marker : barsMarkersList)
+            map.addMarker(marker);
+
         if (locationService.initDeviceLocation()){
 
-            //tel aviv lat: 32.0853, long: 34.7818
             location_latitude = locationService.getDeviceLocation().getLatitude();
             location_longitude = locationService.getDeviceLocation().getLongitude();
 
@@ -90,13 +125,60 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
             Log.i(TAG,"In the end of onMapReady callback function");
         }
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//
-//        Log.i(TAG,"In the end of onMapReady callback function");
     }
+
+
+    private void obtainBarsMarkersList() {
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String name;
+                double location_latitude, location_longitude;
+
+                Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
+
+                for (String key : map.keySet()) {
+                    if (key.equals("Information")) {
+                        Map<String, Object> infoMap = map.get(key);
+                        name = (String) infoMap.get(DB_NODES[0]);
+                        Log.i(TAG, "name is :" + name);
+                        location_latitude = (Double) (infoMap.get(DB_NODES[1]));
+                        Log.i(TAG, "lat is :" + location_latitude);
+                        location_longitude = (Double) (infoMap.get(DB_NODES[2]));
+
+                        LatLng barLocation = new LatLng(location_latitude, location_longitude);
+                        MarkerOptions currentMarker = new MarkerOptions().position(barLocation).title(name);
+                        barsMarkersList.add(currentMarker);
+                    }
+                }
+
+                Log.i(TAG, "In ObtainBarsMarkersList function");
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 
 
     /////////////////////Service functions//////////////////////////////
