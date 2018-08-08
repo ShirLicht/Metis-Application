@@ -75,7 +75,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         locationService = new LocationService(this);
         bindLocationService();
 
-        logoutBtn = findViewById(R.id.SignOutBtn);
         bindUI();
         getUserInfo();
 
@@ -85,14 +84,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
        // userProfilePic.setImageURI(userPhotoUrl);
 
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-               firebaseAuth.signOut();//log out from firebase
-                LoginManager.getInstance().logOut();//log out from facebook
-                Intent intent = new Intent(MapActivity.this,MainActivity.class );
-                startActivity(intent);
-            }
-        });
+        btnEvents();
 
 
 
@@ -129,7 +121,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         logoutBtn = (Button)findViewById(R.id.SignOutBtn);
     }
 
-}
+    public void btnEvents(){
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                firebaseAuth.signOut();//log out from firebase
+                LoginManager.getInstance().logOut();//log out from facebook
+                Intent intent = new Intent(MapActivity.this,MainActivity.class );
+                startActivity(intent);
+            }
+        });
+    }
+
 
     public void onResume(){
         super.onResume();

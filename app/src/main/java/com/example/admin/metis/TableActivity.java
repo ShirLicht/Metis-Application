@@ -123,13 +123,13 @@ public class TableActivity extends AppCompatActivity {
 
             switch (position){
                 case 0:
-                    fragment = new FoodMenuFragment();
+                    fragment = new FullMenuFragment();
                     break;
                 case 1:
-                    fragment = new AlcoDrinksFragment();
+                    fragment = new UserOrderFragment();
                     break;
                 case 2:
-                    fragment = new NonAlcoDrinksFragment();
+                    fragment = new TableOrderFragment();
                     break;
 
             }
