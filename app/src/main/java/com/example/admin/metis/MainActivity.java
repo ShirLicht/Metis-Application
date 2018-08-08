@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "Metis-Application: ";
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
-    private GPSTrackerService gps_tracker;
+    private LocationService gps_tracker;
     private LoginButton loginButton;
 
 
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         btn =  findViewById(R.id.idButton);
 
-        gps_tracker = new GPSTrackerService(this);
+        gps_tracker = new LocationService(this);
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
