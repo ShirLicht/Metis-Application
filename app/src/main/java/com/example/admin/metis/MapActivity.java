@@ -1,9 +1,11 @@
 package com.example.admin.metis;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import com.google.firebase.auth.UserInfo;
@@ -59,23 +62,24 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private Uri userPhotoUrl;
     private TextView userNameTxt;
     private CircleImageView userProfilePic;
+    private SupportMapFragment mapFragment;
+    private Activity uiActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        uiActivity = this;
         firebaseAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
         barsMarkersList = new ArrayList<>();
 
         //When the user is log in already -> there is no a bar marker
-        obtainBarsMarkersList();
 
         locationService = new LocationService(this);
         bindLocationService();
 
-        logoutBtn = findViewById(R.id.SignOutBtn);
         bindUI();
         getUserInfo();
 
@@ -87,21 +91,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-               firebaseAuth.signOut();//log out from firebase
+                firebaseAuth.signOut();//log out from firebase
                 LoginManager.getInstance().logOut();//log out from facebook
                 Intent intent = new Intent(MapActivity.this,MainActivity.class );
                 startActivity(intent);
             }
         });
 
-
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        initMap();
 
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
     }
 
     public void getUserInfo()
@@ -119,7 +125,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 userName = profile.getDisplayName();
                 userPhotoUrl = profile.getPhotoUrl();
             }
-            ;
+
         }
     }
 
@@ -129,15 +135,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         logoutBtn = (Button)findViewById(R.id.SignOutBtn);
     }
 
-}
+
 
     public void onResume(){
         super.onResume();
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     public void onBackPressed(){
@@ -145,6 +146,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         LoginManager.getInstance().logOut();//log out from facebook
         Intent intent = new Intent(MapActivity.this,MainActivity.class );
         startActivity(intent);
+    }
+
+    public void onDestroy(){
+        super.onDestroy();
+        firebaseAuth.signOut();//log out from firebase
+        LoginManager.getInstance().logOut();//log out from facebook
     }
 
     @Override
@@ -174,7 +181,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
 
-    private void obtainBarsMarkersList() {
+//    private class DownloadsBarsData extends AsyncTask<URL,Void, ArrayList<MarkerOptions>> {
+//        @Override
+//        protected ArrayList<MarkerOptions> doInBackground(URL... urls) {
+//            return null;
+//        }
+//    }
+
+    private void initMap() {
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -187,11 +201,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     if (key.equals("Information")) {
                         Map<String, Object> infoMap = map.get(key);
                         name = (String) infoMap.get(DB_NODES[0]);
-                        Log.i(TAG, "name is :" + name);
                         location_latitude = (Double) (infoMap.get(DB_NODES[1]));
-                        Log.i(TAG, "lat is :" + location_latitude);
                         location_longitude = (Double) (infoMap.get(DB_NODES[2]));
-
                         LatLng barLocation = new LatLng(location_latitude, location_longitude);
                         MarkerOptions currentMarker = new MarkerOptions().position(barLocation).title(name);
                         barsMarkersList.add(currentMarker);
@@ -199,6 +210,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 }
 
                 Log.i(TAG, "In ObtainBarsMarkersList function");
+                mapFragment.getMapAsync(MapActivity.this);
 
             }
 

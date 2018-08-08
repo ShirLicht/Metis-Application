@@ -51,6 +51,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/architects_daughter"
         android:text="SIGN OUT"
         android:textColor="@android:color/background_dark"
@@ -58,7 +59,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintStart_toEndOf="@+id/UserNameTxtView" />
+        app:layout_constraintStart_toEndOf="@+id/UserNameTxtView"
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <TextView
         android:id="@+id/UserNameTxtView"
@@ -68,7 +70,8 @@
         android:layout_marginStart="8dp"
         android:fontFamily="@font/monoton"
         android:text=""
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/com_facebook_blue"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_image" />
@@ -95,7 +98,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        map:layout_constraintBottom_toTopOf="@+id/SignOutBtn"
+        map:layout_constraintBottom_toTopOf="@+id/profile_image"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
