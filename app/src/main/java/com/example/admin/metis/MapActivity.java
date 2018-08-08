@@ -12,6 +12,9 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -20,7 +23,7 @@ public class MapActivity extends AppCompatActivity {
     private String userName, providerId;
     private Uri userPhotoUrl;
     private TextView userNameTxt;
-    private de.hdodenhof.circleimageview.CircleImageView userProfilePic;
+    private CircleImageView userProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,8 @@ public class MapActivity extends AppCompatActivity {
 
         //user name & profile image from facebook account
         userNameTxt.setText(userName);
-        userProfilePic.setImageURI(userPhotoUrl);
+        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
+       // userProfilePic.setImageURI(userPhotoUrl);
 
         mAuth = FirebaseAuth.getInstance();
 
