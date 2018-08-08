@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NonAlcoDrinksFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,10 +14,19 @@
         android:backgroundTint="#80FFFFFF"
         android:backgroundTintMode="src_over"
         android:fontFamily="@font/comfortaa_light"
-        android:text="Soft Drinks"
+        android:text="Non Alcoholic Drinks"
         android:textAlignment="center"
         android:textColor="@android:color/background_dark"
         android:textSize="36sp"
         android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="454dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </FrameLayout>

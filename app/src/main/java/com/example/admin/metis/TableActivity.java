@@ -1,7 +1,9 @@
 package com.example.admin.metis;
 
-
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,20 +20,20 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class BarMActivity extends AppCompatActivity {
+public class TableActivity extends AppCompatActivity {
 
     private final String TAG = "Metis-Application: ";
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bar_m);
+        setContentView(R.layout.activity_table);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -44,12 +46,14 @@ public class BarMActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bar_m, menu);
+        getMenuInflater().inflate(R.menu.menu_table, menu);
         return true;
     }
 
@@ -96,8 +100,8 @@ public class BarMActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_bar_m, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            View rootView = inflater.inflate(R.layout.fragment_table, container, false);
+            TextView textView =  rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
@@ -117,15 +121,15 @@ public class BarMActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             Fragment fragment = null;
 
-            switch (position) {
+            switch (position){
                 case 0:
-                    fragment = new FoodMenuFragment();
+                    fragment = new FullMenuFragment();
                     break;
                 case 1:
-                    fragment = new AlcoDrinksFragment();
+                    fragment = new UserOrderFragment();
                     break;
                 case 2:
-                    fragment = new NonAlcoDrinksFragment();
+                    fragment = new TableOrderFragment();
                     break;
 
             }
@@ -137,5 +141,11 @@ public class BarMActivity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+
+
+
+
     }
+
+
 }

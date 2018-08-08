@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "988947980052",
+    "firebase_url": "https://metis-application.firebaseio.com",
+    "project_id": "metis-application",
+    "storage_bucket": "metis-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988947980052:android:14ef4286ba4c722e",
+        "android_client_info": {
+          "package_name": "com.example.admin.metis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "988947980052-kkag8unnm88h3onl88cq25c3khujs4er.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin.metis",
+            "certificate_hash": "cca656336dd16d8a85e173ca49fa2cf706b2bfde"
+          }
+        },
+        {
+          "client_id": "988947980052-670h6of6endff62nburtodk29vqolab8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvEsXmXl2flTUhVJTuBhKmRgn2X7oXTuA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "988947980052-670h6of6endff62nburtodk29vqolab8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
