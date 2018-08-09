@@ -38,7 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
@@ -59,7 +58,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private static  GoogleMap map;
     private MarkerOptions userMarker;
     private ArrayList<MarkerOptions> barsMarkersList;
-    private Map<String,String> bars = new HashMap<>();
 
     private LocationService locationService;
     private Intent locationServiceIntent;
@@ -81,8 +79,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         barsMarkersList = new ArrayList<>();
 
 
-        //When the user is log in already -> there is no a bar marker
-
         locationService = new LocationService(this);
         bindLocationService();
 
@@ -103,6 +99,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(intent);
             }
         });
+        btnEvents();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -142,9 +139,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
 
+    public void btnEvents(){
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                firebaseAuth.signOut();//log out from firebase
+                LoginManager.getInstance().logOut();//log out from facebook
+                Intent intent = new Intent(MapActivity.this,MainActivity.class );
+                startActivity(intent);
+            }
+        });
+    }
+
 
     public void onResume(){
         super.onResume();
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void onBackPressed(){
@@ -184,6 +197,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             marker.showInfoWindow();
             map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
+
 
             Log.i(TAG,"In the end of onMapReady callback function");
         }
