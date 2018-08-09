@@ -77,7 +77,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
         barsMarkersList = new ArrayList<>();
 
-        //When the user is log in already -> there is no a bar marker
 
         locationService = new LocationService(this);
         bindLocationService();
@@ -99,6 +98,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(intent);
             }
         });
+        btnEvents();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -138,9 +138,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
 
+    public void btnEvents(){
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                firebaseAuth.signOut();//log out from firebase
+                LoginManager.getInstance().logOut();//log out from facebook
+                Intent intent = new Intent(MapActivity.this,MainActivity.class );
+                startActivity(intent);
+            }
+        });
+    }
+
 
     public void onResume(){
         super.onResume();
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void onBackPressed(){
