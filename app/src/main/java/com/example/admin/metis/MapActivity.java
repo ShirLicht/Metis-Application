@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,26 +38,28 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback , GoogleMap.OnInfoWindowClickListener {
 
-    private static final float DEFAULT_ZOOM = 14f;
+    private static final float DEFAULT_ZOOM = 17f;
     private final String BAR_NAME = "bar_name";
-    private final String[] DB_NODES = {"Name", "Location_Latitude", "Location_Longitude"};
+    private final String[] DB_NODES = {"Location", "Latitude", "Longitude"};
     private final String TAG = "Metis-Application: ";
     private final String DB_Url = "https://metis-application.firebaseio.com";
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseRef;
     private Button logoutBtn;
-    private GoogleMap map;
+    private static  GoogleMap map;
     private MarkerOptions userMarker;
     private ArrayList<MarkerOptions> barsMarkersList;
+    private Map<String,String> bars = new HashMap<>();
 
     private LocationService locationService;
     private Intent locationServiceIntent;
@@ -76,6 +79,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
         barsMarkersList = new ArrayList<>();
+
 
         //When the user is log in already -> there is no a bar marker
 
@@ -161,10 +165,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         map = googleMap;
         double location_latitude, location_longitude;
 
-      //Add known bars markers
-        for(MarkerOptions marker : barsMarkersList)
-            map.addMarker(marker);
 
+        for(MarkerOptions marker : barsMarkersList){
+            map.addMarker(marker);
+            map.setOnInfoWindowClickListener(this);
+        }
 
         if (locationService.initDeviceLocation() && userMarker == null){
 
@@ -175,51 +180,42 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             userMarker = new MarkerOptions().position(currentLocation).title("User")
                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
 
-
-
-
             Marker marker = map.addMarker(userMarker);
-            marker.setTag(0);
+            marker.showInfoWindow();
             map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
-
-//            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//               @Override
-//               public boolean onMarkerClick(Marker marker) {
-//                   if((Integer)marker.getTag() == 1){
-//                       Intent intent = new Intent(MapActivity.this, MenuActivity.class );
-//                       intent.putExtra(BAR_NAME,marker.getTitle());
-//                       return true;
-//                   }
-//                   else
-//                       marker.setTag(1);
-//                   return true;
-//
-//               }
-//            });
 
             Log.i(TAG,"In the end of onMapReady callback function");
         }
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker){
+        Intent intent = new Intent(MapActivity.this, MenuActivity.class );
+        intent.putExtra(BAR_NAME,marker.getTitle());
+        startActivity(intent);
+    }
 
     private void initMap() {
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String name;
+                String name = dataSnapshot.getKey();
+
                 double location_latitude, location_longitude;
+
 
                 Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
 
                 for (String key : map.keySet()) {
-                    if (key.equals("Information")) {
+                    if (key.equals(DB_NODES[0])) {
                         Map<String, Object> infoMap = map.get(key);
-                        name = (String) infoMap.get(DB_NODES[0]);
                         location_latitude = (Double) (infoMap.get(DB_NODES[1]));
                         location_longitude = (Double) (infoMap.get(DB_NODES[2]));
                         LatLng barLocation = new LatLng(location_latitude, location_longitude);
                         MarkerOptions currentMarker = new MarkerOptions().position(barLocation).title(name);
+
+
                         barsMarkersList.add(currentMarker);
                     }
                 }

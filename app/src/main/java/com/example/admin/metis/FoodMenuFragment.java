@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static com.example.admin.metis.MenuActivity.bar_name;
+
 
 public class FoodMenuFragment extends Fragment {
 
     private final static String TAG = "Metis-Application: ";
+    private final static String D = "https://metis-application.firebaseio.com/Shame_Bar/Food";
     private final static String BAR_NAME = "bar_name";
     private final static String DB_URL = "https://metis-application.firebaseio.com/";
     private final static String FRAGMENT_NAME = "/Food";
@@ -32,7 +36,9 @@ public class FoodMenuFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        String bar_name = getActivity().getIntent().getStringExtra(BAR_NAME);
+        super.onCreate(savedInstanceState);
+//        String bar_name = getActivity().getIntent().getStringExtra(BAR_NAME);
+        Log.i(TAG,"url : " + DB_URL + bar_name + FRAGMENT_NAME);
         mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + bar_name + FRAGMENT_NAME );
     }
 
