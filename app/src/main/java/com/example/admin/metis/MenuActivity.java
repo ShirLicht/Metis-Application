@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +34,10 @@ public class MenuActivity extends AppCompatActivity {
         bindUI();
         getUserInfo();
         btnEvents();
+
+        //user name & profile image from facebook account
+        userNameTxt.setText(userName);
+        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
 
     }
 

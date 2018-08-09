@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -82,6 +83,10 @@ public class UserOrderFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         getUserInfo();
         bindUI();
+
+        //user name & profile image from facebook account
+        userNameTxt.setText(userName);
+        Picasso.with(getActivity().getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
 
         return view;
     }
