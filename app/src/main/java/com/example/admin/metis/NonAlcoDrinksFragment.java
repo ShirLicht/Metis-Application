@@ -23,8 +23,11 @@ import java.util.Map;
 
 public class NonAlcoDrinksFragment extends Fragment {
 
-    private final String TAG = "Metis-Application: ";
-    private final String DB_Url = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
+    private final static String TAG = "Metis-Application: ";
+    private final static String BAR_NAME = "bar_name";
+    private final static String DB_URL = "https://metis-application.firebaseio.com/";
+    private final static String FRAGMENT_NAME = "/Non_Alcoholic_Drinks";
+
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
@@ -32,7 +35,8 @@ public class NonAlcoDrinksFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
+        String bar_name = getActivity().getIntent().getStringExtra(BAR_NAME);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + bar_name + FRAGMENT_NAME );
     }
 
     @Nullable

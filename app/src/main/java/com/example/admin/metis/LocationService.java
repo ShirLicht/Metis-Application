@@ -17,15 +17,16 @@ import android.os.Binder;
 
 public class LocationService extends Service implements LocationListener {
 
-    private final String TAG = "Metis-Application: ";
-    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private final String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
-    private final String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
+    private final static String TAG = "Metis-Application: ";
+    private final static String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final static String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final static String NETWORK_ACCESS = Manifest.permission.ACCESS_NETWORK_STATE;
+    private final static String WIFI_ACCESS = Manifest.permission.ACCESS_WIFI_STATE;
+    private final static int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private final static int NETWORK_PERMISSION_REQUEST_CODE = 2525;
 
     private final IBinder serviceBinder = new TheBinder();
-    private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private final int NETWORK_PERMISSION_REQUEST_CODE = 2525;
+
 
     private LocationManager locationManager;
     private Location location;

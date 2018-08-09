@@ -25,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final float DEFAULT_ZOOM = 14f;
+    private final String BAR_NAME = "bar_name";
     private final String[] DB_NODES = {"Name", "Location_Latitude", "Location_Longitude"};
     private final String TAG = "Metis-Application: ";
     private final String DB_Url = "https://metis-application.firebaseio.com";
@@ -163,7 +165,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         for(MarkerOptions marker : barsMarkersList)
             map.addMarker(marker);
 
-        if (locationService.initDeviceLocation()){
+
+        if (locationService.initDeviceLocation() && userMarker == null){
 
             location_latitude = locationService.getDeviceLocation().getLatitude();
             location_longitude = locationService.getDeviceLocation().getLongitude();
@@ -172,21 +175,33 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             userMarker = new MarkerOptions().position(currentLocation).title("User")
                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
 
-            map.addMarker(userMarker);
+
+
+
+            Marker marker = map.addMarker(userMarker);
+            marker.setTag(0);
             map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
+
+//            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//               @Override
+//               public boolean onMarkerClick(Marker marker) {
+//                   if((Integer)marker.getTag() == 1){
+//                       Intent intent = new Intent(MapActivity.this, MenuActivity.class );
+//                       intent.putExtra(BAR_NAME,marker.getTitle());
+//                       return true;
+//                   }
+//                   else
+//                       marker.setTag(1);
+//                   return true;
+//
+//               }
+//            });
 
             Log.i(TAG,"In the end of onMapReady callback function");
         }
     }
 
-
-//    private class DownloadsBarsData extends AsyncTask<URL,Void, ArrayList<MarkerOptions>> {
-//        @Override
-//        protected ArrayList<MarkerOptions> doInBackground(URL... urls) {
-//            return null;
-//        }
-//    }
 
     private void initMap() {
         databaseRef.addChildEventListener(new ChildEventListener() {

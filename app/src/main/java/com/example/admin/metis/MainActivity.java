@@ -2,6 +2,7 @@ package com.example.admin.metis;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(){
-        Toast.makeText(MainActivity.this, "You are loged in",Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "You are loged in",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(MainActivity.this,MapActivity.class);
         startActivity(intent);
     }

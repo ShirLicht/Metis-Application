@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ListItemAdapter extends ArrayAdapter<Product>{
 
-    private final String TAG = "Metis-Application: ";
+    private final static String TAG = "Metis-Application: ";
     private Context context;
     private List<Product> itemsList = new ArrayList<>();
 

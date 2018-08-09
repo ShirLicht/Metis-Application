@@ -20,7 +20,8 @@ import android.widget.TextView;
 
 public class BarMActivity extends AppCompatActivity {
 
-    private final String TAG = "Metis-Application: ";
+    private final static String TAG = "Metis-Application: ";
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;

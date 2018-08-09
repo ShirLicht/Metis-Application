@@ -22,7 +22,8 @@ import android.widget.TextView;
 
 public class TableActivity extends AppCompatActivity {
 
-    private final String TAG = "Metis-Application: ";
+    private final static String TAG = "Metis-Application: ";
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 

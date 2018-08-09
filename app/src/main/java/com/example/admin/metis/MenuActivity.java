@@ -9,16 +9,17 @@ import android.widget.Button;
 public class MenuActivity extends AppCompatActivity {
 
     private final String TAG = "Metis-Application: ";
-   private Button menuBtn, tableBtn, chatBtn;
-//
+    private final String BAR_NAME = "bar_name";
+    private Button menuBtn, tableBtn, chatBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        menuBtn = findViewById(R.id.MenuBtn);
-        tableBtn =  findViewById(R.id.TableBtn);
-        chatBtn =  findViewById(R.id.ChatBtn);
+        bindUI();
+        Intent intent = getIntent();
+        String bar_name = intent.getStringExtra(BAR_NAME);
 
         menuBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -36,8 +37,12 @@ public class MenuActivity extends AppCompatActivity {
 
         });
 
+    }
 
-
+    private void bindUI(){
+        menuBtn = findViewById(R.id.MenuBtn);
+        tableBtn =  findViewById(R.id.TableBtn);
+        chatBtn =  findViewById(R.id.ChatBtn);
     }
 
 }
