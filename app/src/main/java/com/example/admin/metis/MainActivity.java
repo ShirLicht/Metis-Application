@@ -32,7 +32,6 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn;
     private final String TAG = "Metis-Application: ";
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
@@ -44,17 +43,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initVars();
         bindUI();
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                Intent intent = new Intent(MainActivity.this,MenuActivity.class );
-                startActivity(intent);
-            }
-        });
-
-
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -71,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(getApplicationContext(), "Error in login process to Facebook", Toast.LENGTH_SHORT).show();
                 // ...
             }
         });
@@ -129,15 +122,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindUI(){
-        mAuth = FirebaseAuth.getInstance();
+        loginButton = findViewById(R.id.login_button);
+    }
 
-        btn =  findViewById(R.id.idButton);
+    private void initVars(){
+        mAuth = FirebaseAuth.getInstance();
 
         gps_tracker = new LocationService(this);
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton = findViewById(R.id.login_button);
     }
 
     public void updateUI(){

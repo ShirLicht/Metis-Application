@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -19,7 +21,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private final String TAG = "Metis-Application: ";
     private final String BAR_NAME = "bar_name";
-   // public static  String bar_name;
+
     static String bar_name;
 
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
@@ -43,6 +45,20 @@ public class MenuActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         getUserInfo();
         btnEvents();
+
+
+        //user name & profile image from facebook account
+        userNameTxt.setText(userName);
+        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
+
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                firebaseAuth.signOut();//log out from firebase
+                LoginManager.getInstance().logOut();//log out from facebook
+                Intent intent = new Intent(MenuActivity.this,MainActivity.class );
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -72,9 +88,9 @@ public class MenuActivity extends AppCompatActivity {
         menuBtn = findViewById(R.id.MenuBtn);
         tableBtn =  findViewById(R.id.TableBtn);
         chatBtn =  findViewById(R.id.ChatBtn);
-        userNameTxt = (TextView)findViewById(R.id.UserNameTxtView);
-        userProfilePic = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.profile_image);
-        logoutBtn = (Button)findViewById(R.id.SignOutBtn);
+        userNameTxt = findViewById(R.id.UserNameTxtView);
+        userProfilePic = findViewById(R.id.profile_image);
+        logoutBtn = findViewById(R.id.SignOutBtn);
     }
 
     public void btnEvents(){

@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,7 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import com.google.firebase.auth.UserInfo;
@@ -78,28 +75,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
         barsMarkersList = new ArrayList<>();
 
-
         locationService = new LocationService(this);
         bindLocationService();
 
         bindUI();
         getUserInfo();
-
-        //user name & profile image from facebook account
-        userNameTxt.setText(userName);
-        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
-       // userProfilePic.setImageURI(userPhotoUrl);
-
-
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                firebaseAuth.signOut();//log out from firebase
-                LoginManager.getInstance().logOut();//log out from facebook
-                Intent intent = new Intent(MapActivity.this,MainActivity.class );
-                startActivity(intent);
-            }
-        });
         btnEvents();
+
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -110,7 +93,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onStart(){
         super.onStart();
-
     }
 
     public void getUserInfo()
@@ -129,13 +111,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 userPhotoUrl = profile.getPhotoUrl();
             }
 
+            //user name & profile image from facebook account
+            userNameTxt.setText(userName);
+            Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
         }
     }
 
     public void bindUI(){
-        userNameTxt = (TextView)findViewById(R.id.UserNameTxtView);
-        userProfilePic = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.profile_image);
-        logoutBtn = (Button)findViewById(R.id.SignOutBtn);
+        //TextView barSearch = findViewById(R.id.activityMap_barNameTxtView);
+        userNameTxt = findViewById(R.id.UserNameTxtView);
+        userProfilePic = findViewById(R.id.profile_image);
+        logoutBtn = findViewById(R.id.SignOutBtn);
     }
 
 
@@ -190,11 +176,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             location_longitude = locationService.getDeviceLocation().getLongitude();
 
             LatLng currentLocation = new LatLng(location_latitude, location_longitude);
-            userMarker = new MarkerOptions().position(currentLocation).title("User")
+            userMarker = new MarkerOptions().position(currentLocation)
                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
 
             Marker marker = map.addMarker(userMarker);
-            marker.showInfoWindow();
             map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
 
