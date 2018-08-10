@@ -74,14 +74,12 @@ public class MenuActivity extends AppCompatActivity {
                 userName = profile.getDisplayName();
                 userPhotoUrl = profile.getPhotoUrl();
             }
-            ;
         }
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
     }
 
     public void bindUI(){

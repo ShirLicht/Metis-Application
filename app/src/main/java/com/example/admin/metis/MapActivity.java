@@ -1,22 +1,28 @@
 package com.example.admin.metis;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.nfc.Tag;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -35,6 +41,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
@@ -54,17 +61,23 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private Button logoutBtn;
     private static  GoogleMap map;
     private MarkerOptions userMarker;
-    private ArrayList<MarkerOptions> barsMarkersList;
+    private Map<String,MarkerOptions> barsContainer;
 
     private LocationService locationService;
     private Intent locationServiceIntent;
     private String userName, providerId;
     private Uri userPhotoUrl;
     private TextView userNameTxt;
+    private TextView barSearch;
     private CircleImageView userProfilePic;
     private SupportMapFragment mapFragment;
     private Activity uiActivity;
-//
+    private boolean changeLocationFlag = false;
+    LatLng searchedBarLocation;
+   // private FragmentManager fragmentManager;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,16 +86,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         uiActivity = this;
         firebaseAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_Url);
-        barsMarkersList = new ArrayList<>();
+        barsContainer = new HashMap<>();
 
         locationService = new LocationService(this);
         bindLocationService();
 
         bindUI();
         getUserInfo();
-        btnEvents();
-
-
+        initListeners();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -118,20 +129,41 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     public void bindUI(){
-        //TextView barSearch = findViewById(R.id.activityMap_barNameTxtView);
+        barSearch = findViewById(R.id.barSearchField);
         userNameTxt = findViewById(R.id.UserNameTxtView);
         userProfilePic = findViewById(R.id.profile_image);
         logoutBtn = findViewById(R.id.SignOutBtn);
     }
 
 
-    public void btnEvents(){
+    public void initListeners(){
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 firebaseAuth.signOut();//log out from firebase
                 LoginManager.getInstance().logOut();//log out from facebook
                 Intent intent = new Intent(MapActivity.this,MainActivity.class );
                 startActivity(intent);
+            }
+        });
+
+        barSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(barsContainer.containsKey(charSequence + "")){
+                    searchedBarLocation = barsContainer.get(charSequence+ "").getPosition();
+                    changeLocationFlag = true;
+                    mapFragment.getMapAsync(MapActivity.this);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
@@ -153,19 +185,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         startActivity(intent);
     }
 
-    public void onDestroy(){
-        super.onDestroy();
-        firebaseAuth.signOut();//log out from firebase
-        LoginManager.getInstance().logOut();//log out from facebook
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         double location_latitude, location_longitude;
 
 
-        for(MarkerOptions marker : barsMarkersList){
+        for(MarkerOptions marker : barsContainer.values()){
             map.addMarker(marker);
             map.setOnInfoWindowClickListener(this);
         }
@@ -186,6 +212,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
             Log.i(TAG,"In the end of onMapReady callback function");
         }
+        else if (locationService.initDeviceLocation() && changeLocationFlag ){
+            CameraUpdate searchedBarLoc = CameraUpdateFactory.newLatLngZoom(searchedBarLocation,DEFAULT_ZOOM) ;
+            map.animateCamera(searchedBarLoc);
+            changeLocationFlag = false;
+        }
+
     }
 
     @Override
@@ -199,28 +231,29 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String name = dataSnapshot.getKey();
-
+                String barName = dataSnapshot.getKey();
                 double location_latitude, location_longitude;
 
+                try{
+                    Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
 
-                Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
+                    for (String key : map.keySet()) {
+                        if (key.equals(DB_NODES[0])) {
+                            Map<String, Object> infoMap = map.get(key);
+                            location_latitude = (Double) (infoMap.get(DB_NODES[1]));
+                            location_longitude = (Double) (infoMap.get(DB_NODES[2]));
+                            LatLng barLocation = new LatLng(location_latitude, location_longitude);
+                            MarkerOptions currentMarker = new MarkerOptions().position(barLocation).title(barName);
 
-                for (String key : map.keySet()) {
-                    if (key.equals(DB_NODES[0])) {
-                        Map<String, Object> infoMap = map.get(key);
-                        location_latitude = (Double) (infoMap.get(DB_NODES[1]));
-                        location_longitude = (Double) (infoMap.get(DB_NODES[2]));
-                        LatLng barLocation = new LatLng(location_latitude, location_longitude);
-                        MarkerOptions currentMarker = new MarkerOptions().position(barLocation).title(name);
-
-
-                        barsMarkersList.add(currentMarker);
+                            barsContainer.put(barName, currentMarker);
+                        }
                     }
+
+                    mapFragment.getMapAsync(MapActivity.this);
+                }catch (Exception ex){
+                    Log.e(TAG,"MapActivity: initMap function -> error :" + ex.getMessage());
                 }
 
-                Log.i(TAG, "In ObtainBarsMarkersList function");
-                mapFragment.getMapAsync(MapActivity.this);
 
             }
 
