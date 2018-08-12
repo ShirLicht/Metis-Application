@@ -1,16 +1,14 @@
 package com.example.admin.metis;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -20,6 +18,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -28,8 +27,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.net.URL;
-
 public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "Metis-Application: ";
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private LocationService gps_tracker;
     private LoginButton loginButton;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,14 +69,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+    
+    public void onResume(){
+        super.onResume();
         if (!gps_tracker.isGPSEnable()) {
             showSettingsAlert();
         }
@@ -91,19 +85,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("GPS is settings");
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
-                finish();
+               //finish();
             }
         });
+
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
             @Override

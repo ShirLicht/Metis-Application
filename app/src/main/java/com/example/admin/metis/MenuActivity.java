@@ -38,35 +38,23 @@ public class MenuActivity extends AppCompatActivity {
         bar_name = getIntent().getStringExtra(BAR_NAME);
         Log.i(TAG,"bar name is " + bar_name);
 
-
         bindUI();
-        Intent intent = getIntent();
-        String bar_name = intent.getStringExtra(BAR_NAME);
         firebaseAuth = FirebaseAuth.getInstance();
         getUserInfo();
         btnEvents();
-
 
         //user name & profile image from facebook account
         userNameTxt.setText(userName);
         Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                firebaseAuth.signOut();//log out from firebase
-                LoginManager.getInstance().logOut();//log out from facebook
-                Intent intent = new Intent(MenuActivity.this,MainActivity.class );
-                startActivity(intent);
-            }
-        });
-
     }
 
     public void getUserInfo()
     {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             for (UserInfo profile : user.getProviderData()) {
+
                 // Id of the provider (ex: google.com)
                 providerId = profile.getProviderId();
 
@@ -94,7 +82,7 @@ public class MenuActivity extends AppCompatActivity {
     public void btnEvents(){
         menuBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MenuActivity.this, BarMActivity.class);
+                Intent intent = new Intent(MenuActivity.this, BarMenuActivity.class);
                 startActivity(intent);
             }
 
@@ -103,6 +91,23 @@ public class MenuActivity extends AppCompatActivity {
         tableBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this, TableActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                firebaseAuth.signOut();//log out from firebase
+                LoginManager.getInstance().logOut();//log out from facebook
+                Intent intent = new Intent(MenuActivity.this,MainActivity.class );
+                startActivity(intent);
+            }
+        });
+
+        chatBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Intent intent = new Intent(MenuActivity.this, ChatActivity.class);
                 startActivity(intent);
             }
 

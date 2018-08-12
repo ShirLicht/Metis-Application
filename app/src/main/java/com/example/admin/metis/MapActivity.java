@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdate;
@@ -51,10 +52,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback , GoogleMap.OnInfoWindowClickListener {
 
     private static final float DEFAULT_ZOOM = 17f;
-    private final String BAR_NAME = "bar_name";
-    private final String[] DB_NODES = {"Location", "Latitude", "Longitude"};
-    private final String TAG = "Metis-Application: ";
-    private final String DB_Url = "https://metis-application.firebaseio.com";
+    private static final String BAR_NAME = "bar_name";
+    private static final String[] DB_NODES = {"Location", "Latitude", "Longitude"};
+    private static final String TAG = "Metis-Application: ";
+    private static final String DB_Url = "https://metis-application.firebaseio.com";
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseRef;
@@ -92,7 +93,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         bindLocationService();
 
         bindUI();
-        getUserInfo();
         initListeners();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -104,6 +104,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onStart(){
         super.onStart();
+        getUserInfo();
     }
 
     public void getUserInfo()
@@ -126,6 +127,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             userNameTxt.setText(userName);
             Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
         }
+        else {
+            Toast.makeText(this, "No Recognization of the facebook user", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MapActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     public void bindUI(){

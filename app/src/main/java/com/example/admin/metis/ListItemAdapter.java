@@ -2,7 +2,6 @@ package com.example.admin.metis;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
 
     private final static String TAG = "Metis-Application: ";
     private Context context;
-    private List<Product> itemsList = new ArrayList<>();
+    private List<Product> itemsList;
 
     public ListItemAdapter(Context context,ArrayList<Product> itemsList) {
         super(context, 0 , itemsList);
@@ -31,10 +30,10 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(context).inflate(R.layout.list_item,parent,false);
+            listItem = LayoutInflater.from(context).inflate(R.layout.list_bar_item,parent,false);
 
         Product currentItem = itemsList.get(position);
-        boolean isHeader = currentItem.getPrice().equals(" ") ? true : false;
+        boolean isHeader = currentItem.getPrice().equals(" ");
 
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
