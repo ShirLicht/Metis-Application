@@ -1,5 +1,6 @@
 package com.example.admin.metis;
 
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "Metis-Application: ";
     private static final String BAR_NAME_EXTRA = "bar_name";
     private static final String USERS_NODE = "Users";
+    private static final String USER_ID = "userId";
 
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
     private String userName, userId, providerId;
@@ -78,6 +80,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+
     private void signUserToBar(){
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(USERS_NODE).child(userId);
@@ -93,10 +96,7 @@ public class MenuActivity extends AppCompatActivity {
         databaseReference.removeValue();
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-    }
+
 
     public void bindUI(){
         menuBtn = findViewById(R.id.MenuBtn);
@@ -148,6 +148,15 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onStart(){
+        Log.i(TAG, "MenuActivity: onStart()");
+        super.onStart();
+        Intent intent = new Intent(getBaseContext(), MenuActivityTaskService.class);
+       // intent.putExtra(USER_ID,userId);
+        this.startService(intent);
+    }
+
     public void onPause(){
         Log.i(TAG,"MenuActivity: onPause");
         super.onPause();
@@ -162,8 +171,8 @@ public class MenuActivity extends AppCompatActivity {
         Log.i(TAG,"MenuActivity: onDestory");
         super.onDestroy();
         signOutUserFromBar();
-        firebaseAuth.signOut();//log out from firebase
-        LoginManager.getInstance().logOut();//log out from facebook
+//        firebaseAuth.signOut();//log out from firebase
+//        LoginManager.getInstance().logOut();//log out from facebook
     }
 
 }
