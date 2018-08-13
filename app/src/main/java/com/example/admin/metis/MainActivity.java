@@ -3,6 +3,7 @@ package com.example.admin.metis;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         });
-
     }
 
     @Override
@@ -75,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
     
     public void onResume(){
         super.onResume();
+
+
+
         if (!gps_tracker.isGPSEnable()) {
             showSettingsAlert();
         }
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null){
             updateUI();
         }
+        else
+            MediaPlayer.create(this,R.raw.meidan).start();
     }
 
 

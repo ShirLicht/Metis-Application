@@ -27,7 +27,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "Metis-Application: ";
     private static final String BAR_NAME_EXTRA = "bar_name";
     private static final String USERS_NODE = "Users";
-    private static final String USER_ID = "userId";
+   // private static final String USER_ID = "userId";
 
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
     private String userName, userId, providerId;
@@ -95,8 +95,6 @@ public class MenuActivity extends AppCompatActivity {
     private void signOutUserFromBar(){
         databaseReference.removeValue();
     }
-
-
 
     public void bindUI(){
         menuBtn = findViewById(R.id.MenuBtn);
@@ -171,6 +169,8 @@ public class MenuActivity extends AppCompatActivity {
         Log.i(TAG,"MenuActivity: onDestory");
         super.onDestroy();
         signOutUserFromBar();
+
+        //Sign out from facebook
 //        firebaseAuth.signOut();//log out from firebase
 //        LoginManager.getInstance().logOut();//log out from facebook
     }
