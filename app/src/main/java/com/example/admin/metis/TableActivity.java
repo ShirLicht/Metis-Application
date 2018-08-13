@@ -1,5 +1,6 @@
 package com.example.admin.metis;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,15 +23,21 @@ import android.widget.TextView;
 
 public class TableActivity extends AppCompatActivity {
 
-    private final static String TAG = "Metis-Application: ";
+    private static final String TAG = "Metis-Application: ";
+    private static final String IS_USER_SIGNED = "isUserSigned";
+  //  private static final String BAR_NAME_EXTRA = "bar_name";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+    //static String BAR_NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
+
+       // BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -147,6 +154,14 @@ public class TableActivity extends AppCompatActivity {
 
 
     }
+//
+////    @Override
+////    public void onBackPressed() {
+////        Intent intent = new Intent(TableActivity.this, MenuActivity.class);
+////        intent.putExtra(IS_USER_SIGNED, true);
+////       // intent.putExtra(BAR_NAME_EXTRA, BAR_NAME);
+////        startActivity(intent);
+////    }
 
 
 }

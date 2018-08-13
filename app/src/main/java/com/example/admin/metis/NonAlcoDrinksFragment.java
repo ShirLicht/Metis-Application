@@ -22,13 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.example.admin.metis.MenuActivity.bar_name;
+import static com.example.admin.metis.MenuActivity.BAR_NAME;
+
 
 public class NonAlcoDrinksFragment extends Fragment {
 
     private final static String TAG = "Metis-Application: ";
-    private final static String BAR_NAME = "bar_name";
-    private final static String D = "https://metis-application.firebaseio.com/Shame_Bar/Non_Alcoholic_Drinks";
     private final static String DB_URL = "https://metis-application.firebaseio.com/";
     private final static String FRAGMENT_NAME = "/Non_Alcoholic_Drinks";
 
@@ -41,8 +40,8 @@ public class NonAlcoDrinksFragment extends Fragment {
         super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG,"url : " + DB_URL + bar_name + FRAGMENT_NAME);
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + bar_name + FRAGMENT_NAME );
+        Log.i(TAG,"url : " + DB_URL + BAR_NAME + FRAGMENT_NAME);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + BAR_NAME + FRAGMENT_NAME );
     }
 
     @Nullable

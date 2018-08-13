@@ -52,7 +52,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback , GoogleMap.OnInfoWindowClickListener {
 
     private static final float DEFAULT_ZOOM = 17f;
-    private static final String BAR_NAME = "bar_name";
+    private static final String BAR_NAME_EXTRA = "bar_name";
+    private static final String IS_USER_SIGNED = "isUserSigned";
     private static final String[] DB_NODES = {"Location", "Latitude", "Longitude"};
     private static final String TAG = "Metis-Application: ";
     private static final String DB_Url = "https://metis-application.firebaseio.com";
@@ -74,8 +75,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private SupportMapFragment mapFragment;
     private Activity uiActivity;
     private boolean changeLocationFlag = false;
-    LatLng searchedBarLocation;
-   // private FragmentManager fragmentManager;
+    // LatLng searchedBarLocation;
+    private LatLng searchedBarLocation;
+
 
 
 
@@ -231,7 +233,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onInfoWindowClick(Marker marker){
         Intent intent = new Intent(MapActivity.this, MenuActivity.class );
-        intent.putExtra(BAR_NAME,marker.getTitle());
+        intent.putExtra(BAR_NAME_EXTRA, marker.getTitle());
         startActivity(intent);
     }
 

@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private static final String IS_USER_SIGNED = "isUserSigned";
+
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private TabLayout tabLayout;
@@ -31,7 +33,6 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         bindUI();
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         //Tabs
@@ -43,13 +44,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(ChatActivity.this, MenuActivity.class);
-        startActivity(intent);
-    }
-
     public void onStart(){
         super.onStart();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -59,6 +53,5 @@ public class ChatActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.chatActivity_tabPager);
         tabLayout = findViewById(R.id.chatActivity_tabs);
     }
-
 
 }

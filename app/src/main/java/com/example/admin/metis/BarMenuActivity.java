@@ -1,34 +1,23 @@
 package com.example.admin.metis;
 
-
-import android.app.Activity;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 public class BarMenuActivity extends AppCompatActivity {
 
-    private final static String TAG = "Metis-Application: ";
+    private static final String TAG = "Metis-Application: ";
+    private static final String IS_USER_SIGNED = "isUserSigned";
 
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +29,6 @@ public class BarMenuActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
                 SectionsPagerAdapter.AdapterVersion.BAR_MENU);
 
@@ -75,5 +63,4 @@ public class BarMenuActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

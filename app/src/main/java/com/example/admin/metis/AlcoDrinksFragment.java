@@ -1,6 +1,5 @@
 package com.example.admin.metis;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -21,16 +19,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.example.admin.metis.MenuActivity.bar_name;
+import static com.example.admin.metis.MenuActivity.BAR_NAME;
 
 
 public class AlcoDrinksFragment extends Fragment {
 
     private final static String TAG = "Metis-Application: ";
     private final static String DB_URL= "https://metis-application.firebaseio.com/";
-    private final static String D = "https://metis-application.firebaseio.com/Shame_Bar/Alcoholic_Drinks";
     private final static String FRAGMENT_NAME = "/Alcoholic_Drinks";
-    private final static String BAR_NAME = "bar_name";
 
     private DatabaseReference mRef;
     private ListView listView;
@@ -39,10 +35,9 @@ public class AlcoDrinksFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-//        String bar_name = getActivity().getIntent().getStringExtra(BAR_NAME);
-        Log.i(TAG,"url : " + DB_URL + bar_name + FRAGMENT_NAME);
-        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + bar_name + FRAGMENT_NAME );
-       // mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(D);//DB_URL + bar_name + FRAGMENT_NAME );
+
+        Log.i(TAG,"url : " + DB_URL + BAR_NAME + FRAGMENT_NAME);
+        mRef  = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + BAR_NAME + FRAGMENT_NAME );
     }
 
     @Nullable
