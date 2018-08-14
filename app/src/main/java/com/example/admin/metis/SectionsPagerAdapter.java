@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    enum AdapterVersion {BAR_MENU, BAR_CHAT}
+    enum AdapterVersion {BAR_MENU, BAR_CHAT, BAR_TABLE}
 
     private AdapterVersion adapterVersion;
 
@@ -25,6 +25,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return new FoodMenuFragment();
                     case BAR_CHAT:
                         return new ChatBarFragment();
+                    case BAR_TABLE:
+                        return new FullMenuFragment();
                 }
 
             case 1:
@@ -33,6 +35,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return new AlcoDrinksFragment();
                     case BAR_CHAT:
                         return new ChatPersonalFragment();
+                    case BAR_TABLE:
+                        return new UserOrderFragment();
                 }
 
             case 2:
@@ -41,6 +45,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return new NonAlcoDrinksFragment();
                     case BAR_CHAT:
                         return new ChatRequestsFragment();
+                    case BAR_TABLE:
+                        return new TableOrderFragment();
                 }
 
             default:
@@ -64,6 +70,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return "FOOD";
                     case BAR_CHAT:
                         return "GENERAL CHAT";
+                    case BAR_TABLE:
+                        return "MENU";
                 }
 
             case 1:
@@ -72,6 +80,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return "ALCOHOLIC DRINKS";
                     case BAR_CHAT:
                         return "PERSONAL CHAT";
+                    case BAR_TABLE:
+                        return "MY ORDER";
                 }
 
             case 2:
@@ -80,6 +90,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                         return "NON ALCOHOLIC DRINKS";
                     case BAR_CHAT:
                         return "CHAT REQUESTS";
+                    case BAR_TABLE:
+                        return "TABLE ORDER";
                 }
 
             default:

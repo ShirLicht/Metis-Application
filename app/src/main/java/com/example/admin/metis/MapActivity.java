@@ -290,6 +290,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
 
+    public void onDestory(){
+        super.onDestroy();
+        Log.i(TAG,"MapActivity: onDestory callback method");
+        getApplicationContext().unbindService(locationServiceConnection);
+
+    }
 
 
     /////////////////////Service functions//////////////////////////////
@@ -309,7 +315,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
         }
     };
 }

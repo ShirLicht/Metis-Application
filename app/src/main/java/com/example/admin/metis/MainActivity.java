@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
+                Log.i(TAG, "facebook:onError", error);
                 Toast.makeText(getApplicationContext(), "Error in login process to Facebook", Toast.LENGTH_SHORT).show();
                 // ...
             }

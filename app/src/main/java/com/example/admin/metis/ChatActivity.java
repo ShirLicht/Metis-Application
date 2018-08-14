@@ -15,8 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private static final String IS_USER_SIGNED = "isUserSigned";
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private TabLayout tabLayout;

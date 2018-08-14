@@ -18,8 +18,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserOrderFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private String userName, providerId;
     private Uri userPhotoUrl;
     private TextView userNameTxt;
@@ -33,10 +31,6 @@ public class UserOrderFragment extends Fragment {
 
     public static UserOrderFragment newInstance(String param1, String param2) {
         UserOrderFragment fragment = new UserOrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
