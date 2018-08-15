@@ -12,7 +12,6 @@ import android.view.MenuItem;
 public class BarMenuActivity extends AppCompatActivity {
 
     private static final String TAG = "Metis-Application: ";
-    private static final String IS_USER_SIGNED = "isUserSigned";
 
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
@@ -42,12 +41,12 @@ public class BarMenuActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bar_m, menu);
-        return true;
-    }
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_bar_m, menu);
+            return true;
+        }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

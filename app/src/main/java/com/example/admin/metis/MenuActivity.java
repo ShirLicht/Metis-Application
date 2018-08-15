@@ -32,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
     private String userName, userId, providerId;
     private Uri userPhotoUrl;
-    private TextView userNameTxt;
+    private TextView userNameTxt, barNameTxt;
     private CircleImageView userProfilePic;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -48,6 +48,8 @@ public class MenuActivity extends AppCompatActivity {
         Log.i(TAG,"MenuActivity: User choose the bar with the name: " + BAR_NAME);
 
         bindUI();
+        barNameTxt.setText(BAR_NAME);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         getUserInfo();
@@ -103,6 +105,7 @@ public class MenuActivity extends AppCompatActivity {
         userNameTxt = findViewById(R.id.UserNameTxtView);
         userProfilePic = findViewById(R.id.profile_image);
         logoutBtn = findViewById(R.id.SignOutBtn);
+        barNameTxt = findViewById(R.id.barNameTxtView);
     }
 
     public void btnEvents(){

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationService gps_tracker;
     private LoginButton loginButton;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
