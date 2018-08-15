@@ -3,10 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FullMenuFragment"
     android:background="@drawable/food_drinks"
-    android:backgroundTint="#80FFFFFF">
+    android:backgroundTint="#80FFFFFF"
+    android:backgroundTintMode="src_over"
+   >
 
+    <ListView
+        android:id="@+id/Table_Menu_ListView"
+        android:layout_width="match_parent"
+        android:layout_height="452dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginRight="150dp"
+        android:text="TextView" />
 
 
 </FrameLayout>

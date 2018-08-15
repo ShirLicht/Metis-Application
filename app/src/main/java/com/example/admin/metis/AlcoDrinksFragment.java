@@ -26,7 +26,7 @@ public class AlcoDrinksFragment extends Fragment {
 
     private final static String TAG = "Metis-Application: ";
     private final static String DB_URL= "https://metis-application.firebaseio.com/";
-    private final static String FRAGMENT_NAME = "/Alcoholic_Drinks";
+    private final static String FRAGMENT_NAME = "/Menu/Alcoholic_Drinks";
 
     private DatabaseReference mRef;
     private ListView listView;
@@ -52,13 +52,13 @@ public class AlcoDrinksFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String foodType = dataSnapshot.getKey();
-                productsList.add(new Product(foodType," "));
+                productsList.add(new Product(foodType," ", Product.PRODUCT_TYPE.HEADER));
                 Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
 
                 for(String key : map.keySet())
-                    productsList.add(new Product(key, (String)map.get(key)));
+                    productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM));
 
-                listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList);
+                listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE);
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
             }
