@@ -55,7 +55,7 @@ public class FullMenuFragment extends Fragment {
         listView = view.findViewById(R.id.Table_Menu_ListView);
         importMenu();
         return view;
-
+//
     }
 
     private void importMenu() {
