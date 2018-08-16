@@ -1,5 +1,6 @@
 package com.example.admin.metis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -12,7 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -22,17 +26,36 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE}
 
     private final static String TAG = "Metis-Application: ";
+    private static final String USERS_NODE = "Users";
+    private static final String ORDERS_NODE = "Orders";
+
     private VIEW_SOURCE view_source;
     private Typeface topicFont, headerFont, itemFont;
 
     private Context context;
     private List<Product> itemsList;
+    private TableActivity uiActivity;
+    private HashMap<String,Integer> productsAmountMap;
 
-    public ListItemAdapter(Context context,ArrayList<Product> itemsList, VIEW_SOURCE view_source) {
+    public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity) {
         super(context, 0 , itemsList);
         this.context = context;
         this.itemsList = itemsList;
         this.view_source = view_source;
+        this.uiActivity = uiActivity;
+
+        if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+            initProductsAmountMap();
+        }
+
+    }
+
+    private void initProductsAmountMap(){
+        productsAmountMap = new HashMap<>();
+        ArrayList<String> productsNames = uiActivity.getProductsNames();
+
+        for(String productName: productsNames)
+            productsAmountMap.put(productName, 0);
     }
 
     @NonNull
@@ -52,7 +75,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item,parent,false);
                 break;
         }
-        Product currentItem = itemsList.get(position);
+        final Product currentItem = itemsList.get(position);
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
 
@@ -71,6 +94,20 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
 
                 if(view_source == VIEW_SOURCE.TABLE_SOURCE){
                     nameTextView.setTextSize(17);
+                    Button btn = listItem.findViewById(R.id.addItemBtn);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String userId = uiActivity.getUserId();
+                            DatabaseReference ref = uiActivity.getDatabaseReference().child(USERS_NODE)
+                                    .child(userId).child(ORDERS_NODE).child(currentItem.getName());
+                            productsAmountMap.put(currentItem.getName(),productsAmountMap.get(currentItem.getName())+1);
+                            HashMap<String,String> userMapData = new HashMap<>();
+                            userMapData.put("price",currentItem.getPrice());
+                            userMapData.put("amount",productsAmountMap.get(currentItem.getName()).toString());
+                            ref.setValue(userMapData);
+                        }
+                    });
                 }
                 break;
 

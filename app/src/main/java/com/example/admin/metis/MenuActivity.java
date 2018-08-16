@@ -27,6 +27,8 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "Metis-Application: ";
     private static final String BAR_NAME_EXTRA = "bar_name";
     private static final String USERS_NODE = "Users";
+    private static final String USER_NAME_EXTRA = "userName";
+    private static final String USER_IMAGE_EXTRA = "userImage";
    // private static final String USER_ID = "userId";
 
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
@@ -92,6 +94,7 @@ public class MenuActivity extends AppCompatActivity {
         userMapData.put("image", userPhotoUrl.toString());
 
         databaseReference.setValue(userMapData);
+
     }
 
     private void signOutUserFromBar(){
@@ -120,6 +123,8 @@ public class MenuActivity extends AppCompatActivity {
         tableBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this, TableActivity.class);
+                intent.putExtra(USER_NAME_EXTRA, userName);
+                intent.putExtra(USER_IMAGE_EXTRA, userPhotoUrl);
                 startActivity(intent);
             }
 
