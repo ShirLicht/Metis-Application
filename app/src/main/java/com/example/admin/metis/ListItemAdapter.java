@@ -1,6 +1,5 @@
 package com.example.admin.metis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -65,8 +64,6 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
         TextView priceTextView;
         setFont();
 
-       // if(listItem == null)
-            //listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
         switch(this.view_source){
             case MENU_SOURCE:
                 listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
@@ -75,6 +72,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item,parent,false);
                 break;
         }
+
         final Product currentItem = itemsList.get(position);
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
