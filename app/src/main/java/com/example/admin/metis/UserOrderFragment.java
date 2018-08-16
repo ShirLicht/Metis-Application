@@ -152,7 +152,6 @@ public class UserOrderFragment extends Fragment {
 
                     for (String attr : map.keySet()) {
                         values[i] = map.get(attr);
-                        Log.i(TAG, "HERE!!!!!! " + attr + " : " + values[i]);
                         i++;
                     }
 
