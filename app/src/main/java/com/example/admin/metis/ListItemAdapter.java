@@ -40,7 +40,6 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private ArrayList<Product> itemsList;
     private TableActivity uiActivity;
     private static HashMap<String,Integer> productsAmountMap;
-    private HashMap<String,Integer> productsAmountMap;
     private CircleImageView userProfilePic;
     private Uri userPhotoUrl;
 
