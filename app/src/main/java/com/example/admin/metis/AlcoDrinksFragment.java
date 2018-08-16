@@ -52,11 +52,11 @@ public class AlcoDrinksFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String foodType = dataSnapshot.getKey();
-                productsList.add(new Product(foodType," ", Product.PRODUCT_TYPE.HEADER));
+                productsList.add(new Product(foodType," ", Product.PRODUCT_TYPE.HEADER, "0"));
                 Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
 
                 for(String key : map.keySet())
-                    productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM));
+                    productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM, "0"));
 
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext()
                         ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null);

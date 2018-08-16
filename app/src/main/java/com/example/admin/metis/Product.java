@@ -7,11 +7,21 @@ public class Product {
     private String name;
     private String price;
     private PRODUCT_TYPE product_type;
+    private String amount;
 
-    public Product(String name, String price, PRODUCT_TYPE product_type){
+    public Product(String name, String price, PRODUCT_TYPE product_type,String amount){
         this.name = name;
         this.price = price;
         this.product_type = product_type;
+        this.amount = amount;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getName() {

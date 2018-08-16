@@ -23,7 +23,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ListItemAdapter extends ArrayAdapter<Product>{
 
-    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE}
+    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE, USER_SOURCE}
 
     private final static String TAG = "Metis-Application: ";
     private static final String USERS_NODE = "Users";
@@ -74,10 +74,15 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
             case TABLE_SOURCE:
                 listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item,parent,false);
                 break;
+            case USER_SOURCE:
+                listItem = LayoutInflater.from(context).inflate(R.layout.user_list_bar_item,parent,false);
+                break;
         }
+
         final Product currentItem = itemsList.get(position);
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
+
 
         switch(currentItem.getProductType()){
 
@@ -91,6 +96,15 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 priceTextView.setText(currentItem.getPrice());
                 priceTextView.setTextColor(Color.BLACK);
                 priceTextView.setTypeface(itemFont);
+
+                if(view_source == VIEW_SOURCE.USER_SOURCE){
+                    TextView amountTextView = listItem.findViewById(R.id.list_item_amount);
+                    amountTextView.setText(currentItem.getAmount());
+                    amountTextView.setTextColor(Color.BLACK);
+                    amountTextView.setTypeface(itemFont);
+
+                    Button btn = listItem.findViewById(R.id.cancelItemBtn);
+                }
 
                 if(view_source == VIEW_SOURCE.TABLE_SOURCE){
                     nameTextView.setTextSize(17);

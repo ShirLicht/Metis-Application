@@ -68,13 +68,13 @@ public class FullMenuFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.i(TAG,"onChildAdded ");
                 String menuTopicName = dataSnapshot.getKey().replaceAll("_"," ");
-                productsList.add(new Product(menuTopicName, "", Product.PRODUCT_TYPE.TOPIC));
+                productsList.add(new Product(menuTopicName, "", Product.PRODUCT_TYPE.TOPIC,"0"));
                // Log.i(TAG, "FullMenuFragment : adding topic : " + menuTopic);
 
                 try {
                     Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
                     for (String header : map.keySet()) {
-                        Product currentHeaderProducts = new Product(header, " ", Product.PRODUCT_TYPE.HEADER);
+                        Product currentHeaderProducts = new Product(header, " ", Product.PRODUCT_TYPE.HEADER,"0");
                         productsList.add(currentHeaderProducts);
                        // Log.i(TAG, "FullMenuFragment : adding header : " + header);
                         Map<String, Object> infoProductMap = map.get(header);
@@ -83,7 +83,7 @@ public class FullMenuFragment extends Fragment {
                             String currentItemName = itemName;
                             ((TableActivity)getActivity()).addNameToProductsNames(currentItemName);
                             String currentItemPrice = (String) (infoProductMap.get(itemName));
-                            productsList.add(new Product(currentItemName, currentItemPrice, Product.PRODUCT_TYPE.ITEM));
+                            productsList.add(new Product(currentItemName, currentItemPrice, Product.PRODUCT_TYPE.ITEM,"0"));
                             Log.i(TAG, "FullMenuFragment : adding product : " + itemName);
                         }
 
