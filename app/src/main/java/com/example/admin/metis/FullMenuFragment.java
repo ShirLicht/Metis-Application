@@ -76,7 +76,6 @@ public class FullMenuFragment extends Fragment {
                     for (String header : map.keySet()) {
                         Product currentHeaderProducts = new Product(header, " ", Product.PRODUCT_TYPE.HEADER,"0");
                         productsList.add(currentHeaderProducts);
-                       // Log.i(TAG, "FullMenuFragment : adding header : " + header);
                         Map<String, Object> infoProductMap = map.get(header);
 
                         for (String itemName : infoProductMap.keySet()) {
@@ -84,7 +83,6 @@ public class FullMenuFragment extends Fragment {
                             ((TableActivity)getActivity()).addNameToProductsNames(currentItemName);
                             String currentItemPrice = (String) (infoProductMap.get(itemName));
                             productsList.add(new Product(currentItemName, currentItemPrice, Product.PRODUCT_TYPE.ITEM,"0"));
-                            Log.i(TAG, "FullMenuFragment : adding product : " + itemName);
                         }
 
                     }

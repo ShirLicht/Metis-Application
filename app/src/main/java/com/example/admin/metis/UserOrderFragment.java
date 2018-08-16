@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -47,7 +48,9 @@ public class UserOrderFragment extends Fragment {
     private ListView listView;
     private ListItemAdapter listItemAdapter;
 
+    Map<String,Integer> productsIndexMap;
     ArrayList<Product> productsList;
+    int indexCounter = 0;
 
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
@@ -66,6 +69,7 @@ public class UserOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        productsIndexMap = new HashMap<>();
     }
 
     @Override
@@ -102,27 +106,27 @@ public class UserOrderFragment extends Fragment {
 
     public void getItemsFromDB(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1")
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("Table 1")
                 .child(USERS_NODE).child(userId).child(ORDERS_NODE);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String itemName = dataSnapshot.getKey();
-                String [] values = new String[2];
-                int i=0;
+                productsIndexMap.put(itemName,indexCounter++);
+                    String [] values = new String[2];
+                    int i=0;
 
-                try{
-                    Map<String,String> map = (Map<String,String>) dataSnapshot.getValue();
+                    try{
+                        Map<String,String> map = (Map<String,String>) dataSnapshot.getValue();
 
-                    for (String attr : map.keySet()) {
-                        values[i] = map.get(attr);
-                        i++;
-                    }
+                        for (String attr : map.keySet()) {
+                            values[i] = map.get(attr);
+                            i++;
+                        }
 
-                    Product currentHeaderProducts = new Product(itemName, values[0], Product.PRODUCT_TYPE.ITEM, values[1]);
-                    productsList.add(currentHeaderProducts);
-
+                        Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+                        productsList.add(currentProduct);
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
                             productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity)getActivity(), null);
@@ -135,12 +139,33 @@ public class UserOrderFragment extends Fragment {
                     Log.e(TAG, "UserOrderFragment: import items error :" + ex.getMessage());
                 }
 
-
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String itemName = dataSnapshot.getKey();
+                String[] values = new String[2];
+                int i = 0;
 
+                try {
+                    Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
+
+                    for (String attr : map.keySet()) {
+                        values[i] = map.get(attr);
+                        i++;
+                    }
+
+                    Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+                    productsList.set(productsIndexMap.get(itemName),currentProduct);
+
+                    listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
+                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity());
+                    listView.setAdapter(listItemAdapter);
+                    listItemAdapter.notifyDataSetChanged();
+                }
+                catch (Exception ex) {
+                    Log.e(TAG, "UserOrderFragment: import items error :" + ex.getMessage());
+                }
             }
 
             @Override

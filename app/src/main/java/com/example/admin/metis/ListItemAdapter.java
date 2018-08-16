@@ -1,12 +1,12 @@
 package com.example.admin.metis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +37,9 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private Typeface topicFont, headerFont, itemFont;
 
     private Context context;
-    private List<Product> itemsList;
+    private ArrayList<Product> itemsList;
     private TableActivity uiActivity;
+    private static HashMap<String,Integer> productsAmountMap;
     private HashMap<String,Integer> productsAmountMap;
     private CircleImageView userProfilePic;
     private Uri userPhotoUrl;
@@ -109,11 +110,13 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
 
                 if(view_source == VIEW_SOURCE.USER_SOURCE){
                     TextView amountTextView = listItem.findViewById(R.id.list_item_amount);
-                    amountTextView.setText("X"+currentItem.getAmount());
-                    amountTextView.setTextColor(Color.GREEN);
+                    nameTextView.setTextSize(18);
+                    priceTextView.setTextSize(18);
+                    amountTextView.setText("X "+ currentItem.getAmount());
+                    amountTextView.setTextColor(Color.rgb(1,88,0));
                     amountTextView.setTypeface(itemFont);
 
-                    Button btn = listItem.findViewById(R.id.cancelItemBtn);
+                    Button btn = listItem.findViewById(R.id.deleteItemBtn);
                 }
 
                 if(view_source == VIEW_SOURCE.TABLE_SOURCE){
