@@ -91,7 +91,7 @@ public class FullMenuFragment extends Fragment {
 
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                            productsList, ListItemAdapter.VIEW_SOURCE.TABLE_SOURCE, (TableActivity)getActivity());
+                            productsList, ListItemAdapter.VIEW_SOURCE.TABLE_SOURCE, (TableActivity)getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
 

@@ -59,7 +59,7 @@ public class AlcoDrinksFragment extends Fragment {
                     productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM, "0"));
 
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext()
-                        ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null);
+                        ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null, null);
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
             }

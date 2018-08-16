@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,16 +15,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ListItemAdapter extends ArrayAdapter<Product>{
 
-    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE, USER_SOURCE}
+    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE, USER_SOURCE, ALL_ORDERS_SOURCE}
 
     private final static String TAG = "Metis-Application: ";
     private static final String USERS_NODE = "Users";
@@ -36,13 +40,16 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private List<Product> itemsList;
     private TableActivity uiActivity;
     private HashMap<String,Integer> productsAmountMap;
+    private CircleImageView userProfilePic;
+    private Uri userPhotoUrl;
 
-    public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity) {
+    public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity, Uri userPhotoUrl) {
         super(context, 0 , itemsList);
         this.context = context;
         this.itemsList = itemsList;
         this.view_source = view_source;
         this.uiActivity = uiActivity;
+        this.userPhotoUrl = userPhotoUrl;
 
         if(view_source == VIEW_SOURCE.TABLE_SOURCE){
             initProductsAmountMap();
@@ -76,6 +83,9 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 break;
             case USER_SOURCE:
                 listItem = LayoutInflater.from(context).inflate(R.layout.user_list_bar_item,parent,false);
+                break;
+            case ALL_ORDERS_SOURCE:
+                listItem = LayoutInflater.from(context).inflate(R.layout.all_orders_list_bar_item,parent,false);
                 break;
         }
 
@@ -122,6 +132,13 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                             ref.setValue(userMapData);
                         }
                     });
+                }
+
+                if(view_source == VIEW_SOURCE.ALL_ORDERS_SOURCE)
+                {
+                    userProfilePic = listItem.findViewById(R.id.profile_image);
+                    Picasso.with(uiActivity.getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
+                    Button btn = listItem.findViewById(R.id.orderBtn);
                 }
                 break;
 

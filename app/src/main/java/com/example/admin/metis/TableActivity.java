@@ -28,6 +28,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -125,6 +126,10 @@ public class TableActivity extends AppCompatActivity {
 
     public String getUserId(){
         return userId;
+    }
+
+    public Uri getUserPhotoUrl() {
+        return userPhotoUrl;
     }
 
     public ArrayList<String> getProductsNames() {

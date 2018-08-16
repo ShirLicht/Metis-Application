@@ -125,7 +125,7 @@ public class UserOrderFragment extends Fragment {
 
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity)getActivity());
+                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity)getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
 
