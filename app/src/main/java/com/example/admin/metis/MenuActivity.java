@@ -174,8 +174,8 @@ public class MenuActivity extends AppCompatActivity {
         signOutUserFromBar();
 
         //Sign out from facebook
-//        firebaseAuth.signOut();//log out from firebase
-//        LoginManager.getInstance().logOut();//log out from facebook
+        firebaseAuth.signOut();//log out from firebase
+        LoginManager.getInstance().logOut();//log out from facebook
     }
 
 }

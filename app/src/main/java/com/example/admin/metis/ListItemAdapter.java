@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -67,6 +68,10 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 priceTextView.setText(currentItem.getPrice());
                 priceTextView.setTextColor(Color.BLACK);
                 priceTextView.setTypeface(itemFont);
+
+                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                    nameTextView.setTextSize(17);
+                }
                 break;
 
             case HEADER:
@@ -77,6 +82,12 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 nameTextView.setTypeface(headerFont);
                 priceTextView = listItem.findViewById(R.id.list_item_price);
                 priceTextView.setText(" ");
+
+                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                    listItem.findViewById(R.id.addItemBtn).setVisibility(View.GONE);
+                    nameTextView.setTextSize(28);
+                }
+
                 break;
 
             case TOPIC:
@@ -86,6 +97,12 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 nameTextView.setTypeface(topicFont);
                 priceTextView = listItem.findViewById(R.id.list_item_price);
                 priceTextView.setText(" ");
+
+                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                    listItem.findViewById(R.id.addItemBtn).setVisibility(View.GONE);
+                    nameTextView.setTextSize(32);
+                }
+
                 break;
         }
 
