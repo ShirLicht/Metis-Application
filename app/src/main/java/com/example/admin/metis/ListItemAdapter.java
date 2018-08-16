@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ListItemAdapter extends ArrayAdapter<Product>{
 
-    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE}
+    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE, USER_SOURCE}
 
     private final static String TAG = "Metis-Application: ";
     private static final String USERS_NODE = "Users";
@@ -32,9 +33,9 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private Typeface topicFont, headerFont, itemFont;
 
     private Context context;
-    private List<Product> itemsList;
+    private ArrayList<Product> itemsList;
     private TableActivity uiActivity;
-    private HashMap<String,Integer> productsAmountMap;
+    private static HashMap<String,Integer> productsAmountMap;
 
     public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity) {
         super(context, 0 , itemsList);
@@ -71,11 +72,15 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
             case TABLE_SOURCE:
                 listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item,parent,false);
                 break;
+            case USER_SOURCE:
+                listItem = LayoutInflater.from(context).inflate(R.layout.user_list_bar_item,parent,false);
+                break;
         }
 
         final Product currentItem = itemsList.get(position);
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
+
 
         switch(currentItem.getProductType()){
 
@@ -89,6 +94,17 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 priceTextView.setText(currentItem.getPrice());
                 priceTextView.setTextColor(Color.BLACK);
                 priceTextView.setTypeface(itemFont);
+
+                if(view_source == VIEW_SOURCE.USER_SOURCE){
+                    TextView amountTextView = listItem.findViewById(R.id.list_item_amount);
+                    nameTextView.setTextSize(18);
+                    priceTextView.setTextSize(18);
+                    amountTextView.setText("X "+ currentItem.getAmount());
+                    amountTextView.setTextColor(Color.rgb(1,88,0));
+                    amountTextView.setTypeface(itemFont);
+
+                    Button btn = listItem.findViewById(R.id.deleteItemBtn);
+                }
 
                 if(view_source == VIEW_SOURCE.TABLE_SOURCE){
                     nameTextView.setTextSize(17);

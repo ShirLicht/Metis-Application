@@ -38,10 +38,9 @@ public class TableActivity extends AppCompatActivity {
     private static final String[] TABLES_NODES = {"Table 1","Table 2","Table 3","Table 4"};
     private static final String TABLE_NODE = "Tables";
     private static final String USERS_NODE = "Users";
-    private static final String USER_NAME_NODE = "name";
-    private static final String USER_IMAGE_NODE = "image";
     private static final String ORDERS_NODE = "Orders";
     private static final String IS_TAKEN_NODE = "isTaken";
+    private static final String PERSONAL_DETAILS_NODE = "Details";
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -92,17 +91,17 @@ public class TableActivity extends AppCompatActivity {
 
     private void signUserToBarTable(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0])
-                .child(USERS_NODE).child(userId);
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]);
+        databaseReference.child(USERS_NODE).child(userId).child(ORDERS_NODE).setValue("empty");
+
         HashMap<String,String> userMapData = new HashMap<>();
-        userMapData.put(USER_NAME_NODE, userName);
-        userMapData.put(USER_IMAGE_NODE, userPhotoUrl.toString());
-        userMapData.put(ORDERS_NODE, "empty");
+        userMapData.put("name",userName);
+        userMapData.put("image", userPhotoUrl.toString());
 
-        databaseReference.setValue(userMapData);
+        databaseReference.child(USERS_NODE).child(userId).child(PERSONAL_DETAILS_NODE).setValue(userMapData);
 
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]).child(IS_TAKEN_NODE);
-        databaseReference.setValue("true");
+        //databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]).child(IS_TAKEN_NODE);
+        databaseReference.child(IS_TAKEN_NODE).setValue("true");
     }
 
     private void getUserInfo() {
