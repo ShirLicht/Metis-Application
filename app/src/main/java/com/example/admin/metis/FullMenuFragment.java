@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -35,6 +36,7 @@ public class FullMenuFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
+
     ArrayList<Product> productsList;
 
     public FullMenuFragment() {
@@ -53,6 +55,7 @@ public class FullMenuFragment extends Fragment {
         productsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_full_menu, container, false);
         listView = view.findViewById(R.id.Table_Menu_ListView);
+
         importMenu();
         return view;
 //
@@ -78,15 +81,17 @@ public class FullMenuFragment extends Fragment {
 
                         for (String itemName : infoProductMap.keySet()) {
                             String currentItemName = itemName;
+                            ((TableActivity)getActivity()).addNameToProductsNames(currentItemName);
                             String currentItemPrice = (String) (infoProductMap.get(itemName));
                             productsList.add(new Product(currentItemName, currentItemPrice, Product.PRODUCT_TYPE.ITEM));
-                            //Log.i(TAG, "FullMenuFragment : adding product : " + itemName);
+                            Log.i(TAG, "FullMenuFragment : adding product : " + itemName);
                         }
 
                     }
 
 
-                    listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(), productsList, ListItemAdapter.VIEW_SOURCE.TABLE_SOURCE);
+                    listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
+                            productsList, ListItemAdapter.VIEW_SOURCE.TABLE_SOURCE, (TableActivity)getActivity());
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
 
@@ -118,4 +123,5 @@ public class FullMenuFragment extends Fragment {
         });
 
     }
+
 }

@@ -28,6 +28,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
@@ -36,6 +37,8 @@ public class TableActivity extends AppCompatActivity {
 
     private static final String TABLE_NODE = "Tables";
     private static final String USERS_NODE = "Users";
+    private static final String ORDERS_NODE = "Orders";
+    private static final String IS_TAKEN_NODE = "isTaken";
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -44,6 +47,7 @@ public class TableActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private String userName, userId, providerId;
     private Uri userPhotoUrl;
+    private ArrayList<String> productsNames;
 
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
@@ -68,6 +72,8 @@ public class TableActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        productsNames = new ArrayList<>();
+
     }
 
 
@@ -83,16 +89,20 @@ public class TableActivity extends AppCompatActivity {
 
     private void signUserToBarTable(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1").child(USERS_NODE);
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1")
+                .child(USERS_NODE).child(userId);
         HashMap<String,String> userMapData = new HashMap<>();
         userMapData.put("name",userName);
         userMapData.put("image", userPhotoUrl.toString());
+        userMapData.put(ORDERS_NODE, "empty");
 
-        databaseReference.setValue(userMapData);//
+        databaseReference.setValue(userMapData);
+
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1").child(IS_TAKEN_NODE);
+        databaseReference.setValue("true");
     }
 
-    private void getUserInfo()
-    {
+    private void getUserInfo() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userId = user.getUid();
 
@@ -109,4 +119,19 @@ public class TableActivity extends AppCompatActivity {
         }
     }
 
+    public DatabaseReference getDatabaseReference(){
+        return firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1");
+    }
+
+    public String getUserId(){
+        return userId;
+    }
+
+    public ArrayList<String> getProductsNames() {
+        return productsNames;
+    }
+
+    public void addNameToProductsNames(String name) {
+        productsNames.add(name);
+    }
 }

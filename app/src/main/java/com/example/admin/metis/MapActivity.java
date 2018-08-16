@@ -317,4 +317,5 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         public void onServiceDisconnected(ComponentName name) {
         }
     };
+
 }

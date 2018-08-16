@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wind_dine"
+    android:background="@drawable/bar_bg"
     android:backgroundTint="#80FFFFFF"
     android:backgroundTintMode="src_over"
     tools:context=".MainActivity">
@@ -15,14 +15,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
         android:fontFamily="@font/bungee_shade"
-        android:text="METIS"
+        android:text="MATIS"
         android:textColor="@android:color/background_dark"
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +36,7 @@
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintHorizontal_bias="0.783"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header" />
 
@@ -75,6 +73,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subHeader"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.927" />
 
 </android.support.constraint.ConstraintLayout>

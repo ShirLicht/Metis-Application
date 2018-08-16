@@ -57,7 +57,8 @@ public class FoodMenuFragment extends Fragment {
                 for(String key : map.keySet())
                     productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM));
 
-                listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE);
+                listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext()
+                        ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null);
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
 
