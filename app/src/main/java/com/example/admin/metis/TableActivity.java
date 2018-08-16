@@ -1,6 +1,7 @@
 package com.example.admin.metis;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -23,12 +24,26 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
+import static com.example.admin.metis.MenuActivity.BAR_NAME;
 
 public class TableActivity extends AppCompatActivity {
 
+    private static final String TABLE_NODE = "Tables";
+    private static final String USERS_NODE = "Users";
+
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     private FirebaseUser firebaseUser;
     private TabLayout tabLayout;
+    private String userName, userId, providerId;
+    private Uri userPhotoUrl;
 
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
@@ -43,6 +58,9 @@ public class TableActivity extends AppCompatActivity {
 
         bindUI();
         firebaseAuth = FirebaseAuth.getInstance();
+
+        getUserInfo();
+        signUserToBarTable();
 
         //Tabs
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
@@ -61,6 +79,34 @@ public class TableActivity extends AppCompatActivity {
     private void bindUI(){
         viewPager = findViewById(R.id.TableActivity_tabPager);
         tabLayout = findViewById(R.id.TableActivity_tabs);
+    }
+
+    private void signUserToBarTable(){
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("1").child(USERS_NODE);
+        HashMap<String,String> userMapData = new HashMap<>();
+        userMapData.put("name",userName);
+        userMapData.put("image", userPhotoUrl.toString());
+
+        databaseReference.setValue(userMapData);//
+    }
+
+    private void getUserInfo()
+    {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        userId = user.getUid();
+
+        if (user != null) {
+            for (UserInfo profile : user.getProviderData()) {
+
+                // Id of the provider (ex: google.com)
+                providerId = profile.getProviderId();
+
+                // Name and profile photo Url
+                userName = profile.getDisplayName();
+                userPhotoUrl = profile.getPhotoUrl();
+            }
+        }
     }
 
 }
