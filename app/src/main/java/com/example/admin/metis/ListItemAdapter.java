@@ -99,8 +99,8 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
 
                 if(view_source == VIEW_SOURCE.USER_SOURCE){
                     TextView amountTextView = listItem.findViewById(R.id.list_item_amount);
-                    amountTextView.setText(currentItem.getAmount());
-                    amountTextView.setTextColor(Color.BLACK);
+                    amountTextView.setText("X"+currentItem.getAmount());
+                    amountTextView.setTextColor(Color.GREEN);
                     amountTextView.setTypeface(itemFont);
 
                     Button btn = listItem.findViewById(R.id.cancelItemBtn);

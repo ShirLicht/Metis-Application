@@ -78,6 +78,7 @@ public class UserOrderFragment extends Fragment {
         getUserInfo();
         bindUI();
         setUIUserInfo();
+        getItemsFromDB();
 
         return view;
     }
