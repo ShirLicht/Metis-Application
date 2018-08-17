@@ -47,7 +47,7 @@ public class MenuActivity extends AppCompatActivity {
         Log.i(TAG,"MenuActivity: onCreate() callback function");
         setContentView(R.layout.activity_menu);
         BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
-        Log.i(TAG,"MenuActivity: User choose the bar with the name: " + BAR_NAME);
+
 
         bindUI();
         barNameTxt.setText(BAR_NAME);
@@ -122,7 +122,7 @@ public class MenuActivity extends AppCompatActivity {
 
         tableBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(MenuActivity.this, TableActivity.class);
+                Intent intent = new Intent(MenuActivity.this, BarcodeActivity.class);
                 intent.putExtra(USER_NAME_EXTRA, userName);
                 intent.putExtra(USER_IMAGE_EXTRA, userPhotoUrl);
                 startActivity(intent);

@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +37,10 @@ import static com.example.admin.metis.MenuActivity.BAR_NAME;
 
 public class TableActivity extends AppCompatActivity {
 
-    private static final String[] TABLES_NODES = {"Table 1","Table 2","Table 3","Table 4"};
+    private final static String TAG = "Metis-Application: ";
+    private static final String FIREBASE_URL_PREFIX = "https://metis-application.firebaseio.com/";
+    private static final String TABLES_URL_NODE = "/Tables/";
+    private static final String FULL_TABLE_URL = "fullTableUrl";
     private static final String TABLE_NODE = "Tables";
     private static final String USERS_NODE = "Users";
     private static final String ORDERS_NODE = "Orders";
@@ -52,6 +56,9 @@ public class TableActivity extends AppCompatActivity {
     private Uri userPhotoUrl;
     private ArrayList<String> productsNames;
 
+    static String TABLE;
+
+
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
 
@@ -63,7 +70,13 @@ public class TableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
 
+        //Obatins the table that match barcode scanned by user
+        String tableNumFullUrl = getIntent().getStringExtra(FULL_TABLE_URL);
+        String tableNumUrlPrefix = FIREBASE_URL_PREFIX.concat(BAR_NAME).concat(TABLES_URL_NODE);
+        TABLE = tableNumFullUrl.split(tableNumUrlPrefix)[1];
+
         bindUI();
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         getUserInfo();
@@ -92,8 +105,7 @@ public class TableActivity extends AppCompatActivity {
 
     private void signUserToBarTable(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]);
-        databaseReference.child(USERS_NODE).child(userId).child(ORDERS_NODE).setValue("empty");
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE);
 
         HashMap<String,String> userMapData = new HashMap<>();
         userMapData.put("name",userName);
@@ -123,7 +135,7 @@ public class TableActivity extends AppCompatActivity {
     }
 
     public DatabaseReference getDatabaseReference(){
-        return firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]);
+        return firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE);
     }
 
     public String getUserId(){

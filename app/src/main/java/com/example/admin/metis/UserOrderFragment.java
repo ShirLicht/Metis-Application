@@ -29,6 +29,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
+import static com.example.admin.metis.TableActivity.TABLE;
 
 
 public class UserOrderFragment extends Fragment {
@@ -106,7 +107,7 @@ public class UserOrderFragment extends Fragment {
 
     public void getItemsFromDB(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("Table 1")
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE)
                 .child(USERS_NODE).child(userId).child(ORDERS_NODE);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
@@ -159,7 +160,7 @@ public class UserOrderFragment extends Fragment {
                     productsList.set(productsIndexMap.get(itemName),currentProduct);
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity());
+                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
                 }

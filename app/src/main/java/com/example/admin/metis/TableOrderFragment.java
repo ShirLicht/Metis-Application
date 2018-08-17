@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
+import static com.example.admin.metis.TableActivity.TABLE;
 
 
 public class TableOrderFragment extends Fragment {
@@ -57,27 +59,37 @@ public class TableOrderFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_table_order, container, false);
+        listView = view.findViewById(R.id.Table_Oreders_ListView);
         productsList = new ArrayList<>();
 
         getItemsFromDB();
-        return inflater.inflate(R.layout.fragment_table_order, container, false);
+
+
+        return view;
 
     }
 
     public void getItemsFromDB() {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child("Table 1")
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE)
                 .child(USERS_NODE);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String userId = dataSnapshot.getKey();
+                if(!dataSnapshot.hasChild(ORDERS_NODE))
+                {
+                    Toast.makeText(getContext(),"No orders by user made",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Map<String, Map<String, Object>> currentUserNodesMap = (Map) dataSnapshot.getValue();
 
                 //Node For - Details/Orders
                 for (String node : currentUserNodesMap.keySet()) {
+
                     Map<String, Object> currentUserDataMap = currentUserNodesMap.get(node);
 
                     if (node.equals("Details")) {

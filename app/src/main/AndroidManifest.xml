@@ -8,7 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name= "android.permission.CAMERA" />
 
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.location.gps" />
 
     <!-- +++++++++++++++++++++++++ Application ++++++++++++++++++++++++++++++++ -->
@@ -58,18 +61,15 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_bar_m"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- +++++++++++++++++++++++++++++Services++++++++++++++++++++++++++++++++++++++++++ -->
         <service
             android:name=".LocationService"
-            android:enabled="true">
-        </service>
-
+            android:enabled="true"></service>
         <service
-            android:name="com.example.admin.metis.MenuActivityTaskService"
-            android:stopWithTask="false">
-        </service>
+            android:name=".MenuActivityTaskService"
+            android:stopWithTask="false"></service>
 
         <!-- +++++++++++++++++++++++++++++Meta-Data+++++++++++++++++++++++++++++++++++++++++ -->
         <meta-data
@@ -85,6 +85,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+        <activity android:name=".BarcodeActivity"></activity>
     </application>
 
 </manifest>
