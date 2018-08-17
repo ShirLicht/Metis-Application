@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/shame_bar"
+    android:background="@drawable/tiki"
     android:backgroundTint="#80FFFFFF"
     android:backgroundTintMode="src_over">
 
@@ -14,11 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/monoton"
-        android:text=" Bar   Name"
-        android:textColor="@android:color/background_dark"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/bungee_shade"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="36sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
