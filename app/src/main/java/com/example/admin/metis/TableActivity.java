@@ -153,4 +153,10 @@ public class TableActivity extends AppCompatActivity {
     public void addNameToProductsNames(String name) {
         productsNames.add(name);
     }
+
+    public void onBackPressed(){
+        Intent intent = new Intent(TableActivity.this, MenuActivity.class);
+        startActivity(intent);
+    }
+
 }
