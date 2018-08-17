@@ -42,6 +42,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private static HashMap<String,Integer> productsAmountMap;
     private CircleImageView userProfilePic;
     private Uri userPhotoUrl;
+    private  TextView amountTextView;
 
     public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity, Uri userPhotoUrl) {
         super(context, 0 , itemsList);
@@ -108,7 +109,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 priceTextView.setTypeface(itemFont);
 
                 if(view_source == VIEW_SOURCE.USER_SOURCE){
-                    TextView amountTextView = listItem.findViewById(R.id.list_item_amount);
+                    amountTextView = listItem.findViewById(R.id.list_item_amount);
                     nameTextView.setTextSize(18);
                     priceTextView.setTextSize(18);
                     amountTextView.setText("X "+ currentItem.getAmount());
@@ -141,6 +142,12 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                     userProfilePic = listItem.findViewById(R.id.profile_image);
                     Picasso.with(uiActivity.getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
                     Button btn = listItem.findViewById(R.id.orderBtn);
+                    amountTextView = listItem.findViewById(R.id.list_item_amount);
+                    nameTextView.setTextSize(18);
+                    priceTextView.setTextSize(18);
+                    amountTextView.setText("X "+ currentItem.getAmount());
+                    amountTextView.setTextColor(Color.rgb(1,88,0));
+                    amountTextView.setTypeface(itemFont);
                 }
                 break;
 
