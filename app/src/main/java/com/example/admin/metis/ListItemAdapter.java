@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
@@ -32,6 +33,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private final static String TAG = "Metis-Application: ";
     private static final String USERS_NODE = "Users";
     private static final String ORDERS_NODE = "Orders";
+    private static boolean flag = false;
 
     private VIEW_SOURCE view_source;
     private Typeface topicFont, headerFont, itemFont;
@@ -39,7 +41,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private Context context;
     private ArrayList<Product> itemsList;
     private TableActivity uiActivity;
-    private static HashMap<String,Integer> productsAmountMap;
+    private static HashMap<String,Integer> productsAmountMap = new HashMap<>();
     private CircleImageView userProfilePic;
     private Uri userPhotoUrl;
     private  TextView amountTextView;
@@ -52,18 +54,19 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
         this.uiActivity = uiActivity;
         this.userPhotoUrl = userPhotoUrl;
 
-        if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+        if(view_source == VIEW_SOURCE.TABLE_SOURCE && productsAmountMap.size() == 0){
             initProductsAmountMap();
         }
 
     }
 
     private void initProductsAmountMap(){
-        productsAmountMap = new HashMap<>();
         ArrayList<String> productsNames = uiActivity.getProductsNames();
 
-        for(String productName: productsNames)
+        for(String productName: productsNames){
             productsAmountMap.put(productName, 0);
+        }
+
     }
 
     @NonNull
@@ -125,14 +128,24 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String userId = uiActivity.getUserId();
-                            DatabaseReference ref = uiActivity.getDatabaseReference().child(USERS_NODE)
-                                    .child(userId).child(ORDERS_NODE).child(currentItem.getName());
-                            productsAmountMap.put(currentItem.getName(),productsAmountMap.get(currentItem.getName())+1);
-                            HashMap<String,String> userMapData = new HashMap<>();
-                            userMapData.put("price",currentItem.getPrice());
-                            userMapData.put("amount",productsAmountMap.get(currentItem.getName()).toString());
-                            ref.setValue(userMapData);
+                            if(!flag){
+                                flag = true;
+                                String userId = uiActivity.getUserId();
+                                DatabaseReference ref = uiActivity.getDatabaseReference().child(USERS_NODE)
+                                        .child(userId).child(ORDERS_NODE).child(currentItem.getName());
+                                Log.i(TAG,"AMOUNT: " + productsAmountMap.get(currentItem.getName())+1);
+                                synchronized (this){
+                                    productsAmountMap.put(currentItem.getName(),((Integer)productsAmountMap.get(currentItem.getName()))+1);
+                                }
+                                HashMap<String,String> userMapData = new HashMap<>();
+                                userMapData.put("price",currentItem.getPrice());
+                                userMapData.put("amount",productsAmountMap.get(currentItem.getName()).toString());
+                                ref.setValue(userMapData);
+                                flag = false;
+                            }
+                            else
+                                Toast.makeText(getApplicationContext(), "In middle of othero rder transcation, please try again in few seconds",Toast.LENGTH_LONG).show();
+
                         }
                     });
                 }
@@ -144,10 +157,11 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                     Button btn = listItem.findViewById(R.id.orderBtn);
                     amountTextView = listItem.findViewById(R.id.list_item_amount);
                     nameTextView.setTextSize(18);
-                    priceTextView.setTextSize(18);
+                    priceTextView.setTextSize(15);
                     amountTextView.setText("X "+ currentItem.getAmount());
                     amountTextView.setTextColor(Color.rgb(1,88,0));
                     amountTextView.setTypeface(itemFont);
+                    amountTextView.setTextSize(15);
                 }
                 break;
 

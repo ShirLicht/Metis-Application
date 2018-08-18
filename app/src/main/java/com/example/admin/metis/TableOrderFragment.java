@@ -1,6 +1,5 @@
 package com.example.admin.metis;
 
-import android.app.LauncherActivity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,7 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +46,10 @@ public class TableOrderFragment extends Fragment {
     private DatabaseReference databaseReference;
 
     private Uri userPhotoUrl;
+    private Button waitressBtn, orderBtn, billBtn;
+    private TextView totalPriceTextView;
+    private static double totalPrice = 0;
+
 
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,17 +65,51 @@ public class TableOrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_order, container, false);
-        listView = view.findViewById(R.id.Table_Oreders_ListView);
+        bindUI(view);
+        setButtonsEvents();
+
         productsList = new ArrayList<>();
 
         getItemsFromDB();
-
 
         return view;
 
     }
 
+    private void bindUI(View view){
+        listView = view.findViewById(R.id.Table_Oreders_ListView);
+        waitressBtn = view.findViewById(R.id.waitress_call_button);
+        orderBtn = view.findViewById(R.id.orderBtn);
+        billBtn = view.findViewById(R.id.bill_button);
+        totalPriceTextView = view.findViewById(R.id.table_total_price_txt);
+    }
+
+    private void setButtonsEvents(){
+        orderBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(getActivity(),"The order was successfully submitted",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        waitressBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(getActivity(),"The waitress is on her way",Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+        billBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(getActivity(),"The bill will arrive soon",Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+
+    }
+
     public void getItemsFromDB() {
+        totalPrice = 0;
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE)
@@ -95,7 +134,7 @@ public class TableOrderFragment extends Fragment {
                     if (node.equals("Details")) {
                         userPhotoUrl = Uri.parse(currentUserDataMap.get("image").toString());
                     } else {
-                        //Current User Qrders For
+                        //Current User Orders For
                         for (String attr : currentUserDataMap.keySet()) {
                             String[] values = new String[2];
                             int i = 0;
@@ -110,6 +149,11 @@ public class TableOrderFragment extends Fragment {
                                 i++;
                             }
 
+                            //Extract the price of the item
+                            String price = values[1].split(" ")[0];
+                            //Added the current item price to total price (multiply by the order amount of the specific item)
+                            totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
+
                             Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
                             productsList.add(currentProduct);
 
@@ -117,6 +161,7 @@ public class TableOrderFragment extends Fragment {
                     }
                 }// end - Node For
 
+                totalPriceTextView.setText("TOTAL PRICE : " + totalPrice + " ILS");
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList ,
                         ListItemAdapter.VIEW_SOURCE.ALL_ORDERS_SOURCE, (TableActivity) getActivity(), userPhotoUrl);
                 listView.setAdapter(listItemAdapter);
@@ -145,5 +190,8 @@ public class TableOrderFragment extends Fragment {
         });
 
 
+
+
     }
+
 }

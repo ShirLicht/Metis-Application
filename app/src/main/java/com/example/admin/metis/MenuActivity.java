@@ -46,7 +46,9 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG,"MenuActivity: onCreate() callback function");
         setContentView(R.layout.activity_menu);
-        BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
+
+        if(getIntent().getStringExtra(BAR_NAME_EXTRA) != null)
+            BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
 
 
         bindUI();

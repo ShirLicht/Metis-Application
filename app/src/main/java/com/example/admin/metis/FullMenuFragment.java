@@ -58,7 +58,6 @@ public class FullMenuFragment extends Fragment {
 
         importMenu();
         return view;
-//
     }
 
     private void importMenu() {
