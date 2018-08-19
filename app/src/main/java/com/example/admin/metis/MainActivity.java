@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         initVars();
         bindUI();
-
+        MediaPlayer.create(this,R.raw.meidan).start();
         loginButton.setReadPermissions("public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-
-
         if (!gps_tracker.isGPSEnable()) {
             showSettingsAlert();
         }
@@ -87,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null){
             updateUI();
         }
-        else
-            MediaPlayer.create(this,R.raw.meidan).start();
     }
 
 
@@ -139,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(){
-        //Toast.makeText(MainActivity.this, "You are loged in",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(MainActivity.this,MapActivity.class);
         startActivity(intent);
     }

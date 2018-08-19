@@ -2,25 +2,12 @@ package com.example.admin.metis;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,10 +22,12 @@ import static com.example.admin.metis.MenuActivity.BAR_NAME;
 
 public class TableActivity extends AppCompatActivity {
 
-    private static final String[] TABLES_NODES = {"Table 1","Table 2","Table 3","Table 4"};
+    private final static String TAG = "Metis-Application: ";
+    private static final String FIREBASE_URL_PREFIX = "https://metis-application.firebaseio.com/";
+    private static final String TABLES_URL_NODE = "/Tables/";
+    private static final String FULL_TABLE_URL = "fullTableUrl";
     private static final String TABLE_NODE = "Tables";
     private static final String USERS_NODE = "Users";
-    private static final String ORDERS_NODE = "Orders";
     private static final String IS_TAKEN_NODE = "isTaken";
     private static final String PERSONAL_DETAILS_NODE = "Details";
 
@@ -51,6 +40,9 @@ public class TableActivity extends AppCompatActivity {
     private Uri userPhotoUrl;
     private ArrayList<String> productsNames;
 
+    static String TABLE;
+
+
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
 
@@ -62,20 +54,20 @@ public class TableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
 
+        //Obatins the table that match barcode scanned by user
+        String tableNumFullUrl = getIntent().getStringExtra(FULL_TABLE_URL);
+        String tableNumUrlPrefix = FIREBASE_URL_PREFIX.concat(BAR_NAME).concat(TABLES_URL_NODE);
+        TABLE = tableNumFullUrl.split(tableNumUrlPrefix)[1];
+
         bindUI();
+
         firebaseAuth = FirebaseAuth.getInstance();
-
-        getUserInfo();
-        signUserToBarTable();
-
-        //Tabs
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                SectionsPagerAdapter.AdapterVersion.BAR_TABLE);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
         productsNames = new ArrayList<>();
 
+        obtainUserInfo();
+        signUserToTable();
+
+        initTabsView();
     }
 
 
@@ -89,31 +81,35 @@ public class TableActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.TableActivity_tabs);
     }
 
-    private void signUserToBarTable(){
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]);
-        databaseReference.child(USERS_NODE).child(userId).child(ORDERS_NODE).setValue("empty");
+    private void initTabsView(){
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                SectionsPagerAdapter.AdapterVersion.BAR_TABLE);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
 
+    private void signUserToTable(){
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE);
+
+        //Update the DB with the current user data
         HashMap<String,String> userMapData = new HashMap<>();
         userMapData.put("name",userName);
         userMapData.put("image", userPhotoUrl.toString());
-
         databaseReference.child(USERS_NODE).child(userId).child(PERSONAL_DETAILS_NODE).setValue(userMapData);
 
-        //databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]).child(IS_TAKEN_NODE);
+        //Update the DB that the Table is now taken -> maybe to add check table status(is taken or not)
         databaseReference.child(IS_TAKEN_NODE).setValue("true");
     }
 
-    private void getUserInfo() {
+    private void obtainUserInfo() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userId = user.getUid();
 
         if (user != null) {
             for (UserInfo profile : user.getProviderData()) {
-
                 // Id of the provider (ex: google.com)
                 providerId = profile.getProviderId();
-
                 // Name and profile photo Url
                 userName = profile.getDisplayName();
                 userPhotoUrl = profile.getPhotoUrl();
@@ -121,12 +117,16 @@ public class TableActivity extends AppCompatActivity {
         }
     }
 
-    public DatabaseReference getDatabaseReference(){
-        return firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLES_NODES[0]);
+    public DatabaseReference getTableDatabaseReference(){
+        return firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE);
     }
 
     public String getUserId(){
         return userId;
+    }
+
+    public Uri getUserPhotoUrl() {
+        return userPhotoUrl;
     }
 
     public ArrayList<String> getProductsNames() {
@@ -134,6 +134,13 @@ public class TableActivity extends AppCompatActivity {
     }
 
     public void addNameToProductsNames(String name) {
+        Log.i(TAG,"current item name is : " + name);
         productsNames.add(name);
     }
+
+    public void onBackPressed(){
+        Intent intent = new Intent(TableActivity.this, MenuActivity.class);
+        startActivity(intent);
+    }
+
 }

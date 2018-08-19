@@ -10,10 +10,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:layout_marginEnd="21dp"
         android:layout_marginStart="2dp"
         android:fontFamily="@font/comfortaa_light"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/list_item_price"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -31,7 +33,7 @@
         android:id="@+id/deleteItemBtn"
         android:layout_width="44dp"
         android:layout_height="42dp"
-        android:layout_marginEnd="34dp"
+        android:layout_marginEnd="10dp"
         android:layout_toEndOf="@id/list_item_price"
         android:background="@android:drawable/ic_delete"
         app:layout_constraintEnd_toEndOf="parent"
