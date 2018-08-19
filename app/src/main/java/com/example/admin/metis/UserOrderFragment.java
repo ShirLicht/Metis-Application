@@ -30,7 +30,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
-import static com.example.admin.metis.TableActivity.TABLE;
+import static com.example.admin.metis.MenuActivity.TABLE;
 
 
 public class UserOrderFragment extends Fragment {
@@ -40,7 +40,7 @@ public class UserOrderFragment extends Fragment {
     private static final String ORDERS_NODE = "Orders";
     private final static String TAG = "Metis-Application: ";
 
-    private static double toatalPrice = 0;
+   static double toatalPrice = 0;
 
     //UI Variables
     private String userName, providerId, userId;
@@ -62,15 +62,12 @@ public class UserOrderFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private ChildEventListener listener;
 
     public UserOrderFragment() {
         // Required empty public constructor
     }
 
-    public static UserOrderFragment newInstance(String param1, String param2) {
-        UserOrderFragment fragment = new UserOrderFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +85,6 @@ public class UserOrderFragment extends Fragment {
         getUserInfo();
         bindUI();
         setUIUserInfo();
-        getItemsFromDB();
 
         return view;
     }
@@ -115,7 +111,7 @@ public class UserOrderFragment extends Fragment {
                 .child(USERS_NODE).child(userId).child(ORDERS_NODE);
         toatalPrice = 0;
 
-        databaseReference.addChildEventListener(new ChildEventListener() {
+         listener = databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String itemName = dataSnapshot.getKey();
@@ -134,7 +130,7 @@ public class UserOrderFragment extends Fragment {
                     //Extract the price of the item
                     String price = values[1].split(" ")[0];
                     //Added the current item price to total price
-                    toatalPrice += (Integer.parseInt(price));
+                    //toatalPrice += (Integer.parseInt(price) * Integer.parseInt(values[0]));
 
 
                     Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
@@ -170,21 +166,26 @@ public class UserOrderFragment extends Fragment {
                     //Extract the price of the item
                     String price = values[1].split(" ")[0];
                     //Added the current item price to total price
-                    synchronized (this){
-                        toatalPrice += (Integer.parseInt(price)) ;
-                        totalPriceTextView.setText("TOTAL PRICE : " + toatalPrice + " ILS");
+                    // toatalPrice += (Integer.parseInt(price));
+                    totalPriceTextView.setText("TOTAL PRICE : " + toatalPrice + " ILS");
+
+
+                    //checks if to remove the product/item from the listView and database.
+                    if(Integer.parseInt(values[0]) == 0){
+                        productsList.remove((int) productsIndexMap.get(itemName));
+                        Log.i(TAG,"values [0] = " + Integer.parseInt(values[0]) + ", productList size : " + productsList.size());
+                        databaseReference.child(itemName).removeValue();
                     }
-
-
-                    Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
-                    productsList.set(productsIndexMap.get(itemName), currentProduct);
-
+                    else{
+                        Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+                        productsList.set(productsIndexMap.get(itemName), currentProduct);
+                    }
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
                             productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
-                   ;
+                    ;
                 } catch (Exception ex) {
                     Log.e(TAG, "UserOrderFragment: import items error :" + ex.getMessage());
                 }
@@ -219,6 +220,19 @@ public class UserOrderFragment extends Fragment {
         //user name & profile image from facebook account
         userNameTxt.setText(userName);
         Picasso.with(getActivity().getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        databaseReference.removeEventListener(listener);
+
+    }
+
+    public void onResume(){
+        super.onResume();
+        getItemsFromDB();
     }
 
 

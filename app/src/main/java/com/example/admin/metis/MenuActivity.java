@@ -3,7 +3,9 @@ package com.example.admin.metis;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +16,11 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -29,6 +34,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final String USERS_NODE = "Users";
     private static final String USER_NAME_EXTRA = "userName";
     private static final String USER_IMAGE_EXTRA = "userImage";
+    private static final String TABLE_NODE = "Tables";
    // private static final String USER_ID = "userId";
 
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
@@ -40,11 +46,11 @@ public class MenuActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     static String BAR_NAME;
+    static String TABLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"MenuActivity: onCreate() callback function");
         setContentView(R.layout.activity_menu);
 
         if(getIntent().getStringExtra(BAR_NAME_EXTRA) != null)
@@ -86,7 +92,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-
     private void signUserToBar(){
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(USERS_NODE).child(userId);
@@ -100,7 +105,19 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void signOutUserFromBar(){
+        Log.i(TAG,"signOutUserFromBar");
+        signOutUserFromTable();
         databaseReference.removeValue();
+    }
+
+    private void signOutUserFromTable(){
+        if(TABLE == null){
+            return;
+        }
+
+        DatabaseReference databaseTableReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE).child(USERS_NODE).child(userId);
+        databaseTableReference.removeValue();
+
     }
 
     public void bindUI(){

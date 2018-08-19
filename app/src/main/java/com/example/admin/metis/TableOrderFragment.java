@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
-import static com.example.admin.metis.TableActivity.TABLE;
+import static com.example.admin.metis.MenuActivity.TABLE;
 
 
 public class TableOrderFragment extends Fragment {
@@ -150,47 +150,7 @@ public class TableOrderFragment extends Fragment {
                     currentProduct.setUserImage(userPhotoUrl);
                     productsList.add(currentProduct);
 
-                }    //end - Current Us
-
-
-
-//
-//                //Node For - Details/Orders
-//                for (String node : currentUserNodesMap.keySet()) {
-//
-//                    Map<String, Object> currentUserDataMap = currentUserNodesMap.get(node);
-//
-//                    if (node.equals("Details")) {
-//                        userPhotoUrl = Uri.parse(currentUserDataMap.get("image").toString());
-//                    } else {
-//                        //Current User Orders For
-//                        for (String attr : currentUserDataMap.keySet()) {
-//                            String[] values = new String[2];
-//                            int i = 0;
-//
-//                            String itemName = attr;
-//
-//                            Map<String, String> currentUserOrderMap = (Map) currentUserDataMap.get(attr);
-//
-//                            //Current Item attributes : amount/price
-//                            for (String valueName : currentUserOrderMap.keySet()) {
-//                                values[i] = currentUserOrderMap.get(valueName);
-//                                i++;
-//                            }
-//
-//                            //Extract the price of the item
-//                            String price = values[1].split(" ")[0];
-//                            //Added the current item price to total price (multiply by the order amount of the specific item)
-//                            totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
-//
-//                            Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
-//                            currentProduct.setUserImage(userPhotoUrl);
-//                            productsList.add(currentProduct);
-//
-//                        }    //end - Current User Qrders For
-//                    }
-//                }// end - Node For
-
+                }
                 totalPriceTextView.setText("TOTAL PRICE : " + totalPrice + " ILS");
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList ,
                         ListItemAdapter.VIEW_SOURCE.ALL_ORDERS_SOURCE, (TableActivity) getActivity(), userPhotoUrl);

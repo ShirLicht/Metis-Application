@@ -1,8 +1,10 @@
 package com.example.admin.metis;
 
+
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.view.ViewPager;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.admin.metis.MenuActivity.BAR_NAME;
+import static com.example.admin.metis.MenuActivity.TABLE;
 
 public class TableActivity extends AppCompatActivity {
 
@@ -40,7 +43,6 @@ public class TableActivity extends AppCompatActivity {
     private Uri userPhotoUrl;
     private ArrayList<String> productsNames;
 
-    static String TABLE;
 
 
     //ViewPager set the content of the tabs
@@ -68,6 +70,8 @@ public class TableActivity extends AppCompatActivity {
         signUserToTable();
 
         initTabsView();
+
+
     }
 
 
@@ -134,7 +138,6 @@ public class TableActivity extends AppCompatActivity {
     }
 
     public void addNameToProductsNames(String name) {
-        Log.i(TAG,"current item name is : " + name);
         productsNames.add(name);
     }
 

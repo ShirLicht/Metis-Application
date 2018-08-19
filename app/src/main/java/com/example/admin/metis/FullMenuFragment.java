@@ -61,7 +61,7 @@ public class FullMenuFragment extends Fragment {
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG,"extract the " + dataSnapshot.getKey() + " items");
+                //Log.i(TAG,"extract the " + dataSnapshot.getKey() + " items");
 
                 //added items topic header to the view
                 String menuTopicName = dataSnapshot.getKey().replaceAll("_"," ");

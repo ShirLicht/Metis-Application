@@ -126,7 +126,23 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //delete item from db + userOrderFragment
+                            String userId = uiActivity.getUserId();
+                            DatabaseReference ref = uiActivity.getTableDatabaseReference().child(USERS_NODE)
+                                    .child(userId).child(ORDERS_NODE).child(currentItem.getName());
+
+
+                            //updated item amount of orders
+                            int newAmount = productsAmountMap.get(currentItem.getName()) - 1;
+                            String ItemPrice = currentItem.getPrice().split(" ")[0];
+                            UserOrderFragment.toatalPrice -= Double.parseDouble(ItemPrice);
+                            //Log.i(TAG, "Item name : " + currentItem.getName() + " , amount : " + newAmount);
+                            productsAmountMap.put(currentItem.getName(), newAmount);
+
+                            //Updated the the DB
+                            HashMap<String, String> userMapData = new HashMap<>();
+                            userMapData.put("price", currentItem.getPrice());
+                            userMapData.put("amount", newAmount + "");
+                            ref.setValue(userMapData);
                         }
                     });
                 }
@@ -143,9 +159,10 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
 
 
                             //updated item amount of orders
-                            Log.i(TAG,"IS EMPTY?" + productsAmountMap.size());
                             int newAmount = productsAmountMap.get(currentItem.getName()) + 1;
-                            Log.i(TAG, "Item name : " + currentItem.getName() + " , amount : " + newAmount);
+                            String ItemPrice = currentItem.getPrice().split(" ")[0];
+                            UserOrderFragment.toatalPrice += Double.parseDouble(ItemPrice);
+                            //Log.i(TAG, "Item name : " + currentItem.getName() + " , amount : " + newAmount);
                             productsAmountMap.put(currentItem.getName(), newAmount);
 
                             //Updated the the DB

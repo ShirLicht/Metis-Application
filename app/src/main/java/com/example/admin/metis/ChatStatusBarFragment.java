@@ -56,6 +56,7 @@ public class ChatStatusBarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_chat__bar_, container, false);
+        listView = view.findViewById(R.id.Online_Users_ListView);
         firebaseAuth = FirebaseAuth.getInstance();
         productsList = new ArrayList<>();
         getOnlineUsers();
@@ -77,7 +78,7 @@ public class ChatStatusBarFragment extends Fragment {
                      // name
                 String userId = dataSnapshot.getKey();
 
-                Map<String, Map<String, String>> currentUserDataMap = (Map) dataSnapshot.getValue();
+                Map<String,String> currentUserDataMap = (Map) dataSnapshot.getValue();
 
                 Uri userPhotoUrl = Uri.parse(currentUserDataMap.get("image").toString());
                 String userName = currentUserDataMap.get("name").toString();
@@ -94,7 +95,7 @@ public class ChatStatusBarFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                //added refreash online list (when user disconnected
             }
 
             @Override
