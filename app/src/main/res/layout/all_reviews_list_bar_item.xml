@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/list_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/anton"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/list_item_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/chewy"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+    <com.github.siyamed.shapeimageview.StarImageView
+        android:id="@+id/starImageView"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_review"
+        app:layout_constraintVertical_bias="0.13"
+        app:siBorderColor="@color/colorPrimary"
+        app:siBorderWidth="3dp" />
+
+    <com.github.siyamed.shapeimageview.StarImageView
+        android:id="@+id/starImageView2"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/starImageView"
+        app:layout_constraintStart_toEndOf="@+id/starImageView"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_review"
+        app:layout_constraintVertical_bias="0.13"
+        app:siBorderColor="@color/colorPrimary"
+        app:siBorderWidth="3dp" />
+
+    <com.github.siyamed.shapeimageview.StarImageView
+        android:id="@+id/starImageView3"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/starImageView2"
+        app:layout_constraintStart_toEndOf="@+id/starImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_review"
+        app:layout_constraintVertical_bias="0.13"
+        app:siBorderColor="@color/colorPrimary"
+        app:siBorderWidth="3dp" />
+
+    <com.github.siyamed.shapeimageview.StarImageView
+        android:id="@+id/starImageView4"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/starImageView3"
+        app:layout_constraintStart_toEndOf="@+id/starImageView3"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_review"
+        app:layout_constraintVertical_bias="0.13"
+        app:siBorderColor="@color/colorPrimary"
+        app:siBorderWidth="3dp" />
+
+    <com.github.siyamed.shapeimageview.StarImageView
+        android:id="@+id/starImageView5"
+        android:layout_width="53dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/starImageView4"
+        app:layout_constraintStart_toEndOf="@+id/starImageView4"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_review"
+        app:layout_constraintVertical_bias="0.13"
+        app:siBorderColor="@color/colorPrimary"
+        app:siBorderWidth="3dp" />
+
+
+</android.support.constraint.ConstraintLayout>

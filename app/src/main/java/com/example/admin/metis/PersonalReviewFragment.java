@@ -34,6 +34,7 @@ public class PersonalReviewFragment extends Fragment {
     private static final String REVIEWS_COUNTER_NODE = "ReviewsCounter";
     private final static String TAG = "Metis-Application: ";
 
+
     private String review, reviewTitle, userId, userName, providerId;
     private Uri userPhotoUrl;
     private EditText reviewEditText, rateEditText;
