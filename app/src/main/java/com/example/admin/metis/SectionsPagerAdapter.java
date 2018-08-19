@@ -24,7 +24,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return new FoodMenuFragment();
                     case BAR_CHAT:
-                        return new ChatStatusBarFragment();
+                        return new OnlineUsersFragment();
                     case BAR_TABLE:
                         return new FullMenuFragment();
                 }
@@ -34,7 +34,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return new AlcoDrinksFragment();
                     case BAR_CHAT:
-                        return new ChatPersonalFragment();
+                        return new PersonalReviewFragment();
                     case BAR_TABLE:
                         return new UserOrderFragment();
                 }
@@ -44,7 +44,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return new NonAlcoDrinksFragment();
                     case BAR_CHAT:
-                        return new ChatRequestsFragment();
+                        return new PeopleReviewsFragment();
                     case BAR_TABLE:
                         return new TableOrderFragment();
                 }
