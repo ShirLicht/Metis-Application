@@ -13,27 +13,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ListItemAdapter extends ArrayAdapter<Product>{
+public class ListItemAdapter extends ArrayAdapter<Product> {
 
-    enum VIEW_SOURCE {TABLE_SOURCE, MENU_SOURCE, USER_SOURCE, ALL_ORDERS_SOURCE}
+    enum VIEW_SOURCE {TABLE_MENU_SOURCE, MENU_SOURCE, USER_SOURCE, ALL_ORDERS_SOURCE}
 
-    private final static String TAG = "Metis-Application: ";
+    private static final  String TAG = "Metis-Application: ";
     private static final String USERS_NODE = "Users";
     private static final String ORDERS_NODE = "Orders";
-    private static boolean flag = false;
+
+    private static final int NUM_OF_TOPICS = 3;
+    private static int Counter = 0;
 
     private VIEW_SOURCE view_source;
     private Typeface topicFont, headerFont, itemFont;
@@ -41,29 +41,32 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
     private Context context;
     private ArrayList<Product> itemsList;
     private TableActivity uiActivity;
-    private static HashMap<String,Integer> productsAmountMap = new HashMap<>();
+    private static HashMap<String, Integer> productsAmountMap = new HashMap<>();
+
     private CircleImageView userProfilePic;
     private Uri userPhotoUrl;
-    private  TextView amountTextView;
+    private TextView amountTextView;
 
     public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity, Uri userPhotoUrl) {
-        super(context, 0 , itemsList);
+        super(context, 0, itemsList);
         this.context = context;
         this.itemsList = itemsList;
         this.view_source = view_source;
         this.uiActivity = uiActivity;
         this.userPhotoUrl = userPhotoUrl;
 
-        if(view_source == VIEW_SOURCE.TABLE_SOURCE && productsAmountMap.size() == 0){
+        //  Only in the first create of listView to initialize the amountMap -> contains how many time each product has been ordered.
+        if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE && (Counter < NUM_OF_TOPICS)) {
             initProductsAmountMap();
+            Counter++;
         }
 
     }
 
-    private void initProductsAmountMap(){
+    private void initProductsAmountMap() {
         ArrayList<String> productsNames = uiActivity.getProductsNames();
 
-        for(String productName: productsNames){
+        for (String productName : productsNames) {
             productsAmountMap.put(productName, 0);
         }
 
@@ -76,20 +79,20 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
         TextView priceTextView;
         setFont();
 
-       // if(listItem == null)
-            //listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
-        switch(this.view_source){
+        // if(listItem == null)
+        //listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
+        switch (this.view_source) {
             case MENU_SOURCE:
-                listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
+                listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item, parent, false);
                 break;
-            case TABLE_SOURCE:
-                listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item,parent,false);
+            case TABLE_MENU_SOURCE:
+                listItem = LayoutInflater.from(context).inflate(R.layout.table_list_bar_item, parent, false);
                 break;
             case USER_SOURCE:
-                listItem = LayoutInflater.from(context).inflate(R.layout.user_list_bar_item,parent,false);
+                listItem = LayoutInflater.from(context).inflate(R.layout.user_list_bar_item, parent, false);
                 break;
             case ALL_ORDERS_SOURCE:
-                listItem = LayoutInflater.from(context).inflate(R.layout.all_orders_list_bar_item,parent,false);
+                listItem = LayoutInflater.from(context).inflate(R.layout.all_orders_list_bar_item, parent, false);
                 break;
         }
 
@@ -98,11 +101,11 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
         nameTextView.setText(currentItem.getName());
 
 
-        switch(currentItem.getProductType()){
+        switch (currentItem.getProductType()) {
 
             case ITEM:
                 //The current Product is a listItem with price
-                listItem.setPadding(0,0,0,0);
+                listItem.setPadding(0, 0, 0, 0);
                 nameTextView.setTextSize(20);
                 nameTextView.setTextColor(Color.BLACK);
                 nameTextView.setTypeface(itemFont);
@@ -111,55 +114,57 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 priceTextView.setTextColor(Color.BLACK);
                 priceTextView.setTypeface(itemFont);
 
-                if(view_source == VIEW_SOURCE.USER_SOURCE){
+                if (view_source == VIEW_SOURCE.USER_SOURCE) {
                     amountTextView = listItem.findViewById(R.id.list_item_amount);
                     nameTextView.setTextSize(18);
                     priceTextView.setTextSize(18);
-                    amountTextView.setText("X "+ currentItem.getAmount());
-                    amountTextView.setTextColor(Color.rgb(1,88,0));
+                    amountTextView.setText("X " + currentItem.getAmount());
+                    amountTextView.setTextColor(Color.rgb(1, 88, 0));
                     amountTextView.setTypeface(itemFont);
 
                     Button btn = listItem.findViewById(R.id.deleteItemBtn);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //delete item from db + userOrderFragment
+                        }
+                    });
                 }
 
-                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE) {
                     nameTextView.setTextSize(17);
                     Button btn = listItem.findViewById(R.id.addItemBtn);
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(!flag){
-                                flag = true;
-                                String userId = uiActivity.getUserId();
-                                DatabaseReference ref = uiActivity.getDatabaseReference().child(USERS_NODE)
-                                        .child(userId).child(ORDERS_NODE).child(currentItem.getName());
-                                Log.i(TAG,"AMOUNT: " + productsAmountMap.get(currentItem.getName())+1);
-                                synchronized (this){
-                                    productsAmountMap.put(currentItem.getName(),((Integer)productsAmountMap.get(currentItem.getName()))+1);
-                                }
-                                HashMap<String,String> userMapData = new HashMap<>();
-                                userMapData.put("price",currentItem.getPrice());
-                                userMapData.put("amount",productsAmountMap.get(currentItem.getName()).toString());
-                                ref.setValue(userMapData);
-                                flag = false;
-                            }
-                            else
-                                Toast.makeText(getApplicationContext(), "In middle of othero rder transcation, please try again in few seconds",Toast.LENGTH_LONG).show();
+                            String userId = uiActivity.getUserId();
+                            DatabaseReference ref = uiActivity.getTableDatabaseReference().child(USERS_NODE)
+                                    .child(userId).child(ORDERS_NODE).child(currentItem.getName());
 
+
+                            //updated item amount of orders
+                            Log.i(TAG,"IS EMPTY?" + productsAmountMap.size());
+                            int newAmount = productsAmountMap.get(currentItem.getName()) + 1;
+                            Log.i(TAG, "Item name : " + currentItem.getName() + " , amount : " + newAmount);
+                            productsAmountMap.put(currentItem.getName(), newAmount);
+
+                            //Updated the the DB
+                            HashMap<String, String> userMapData = new HashMap<>();
+                            userMapData.put("price", currentItem.getPrice());
+                            userMapData.put("amount", newAmount + "");
+                            ref.setValue(userMapData);
                         }
                     });
                 }
 
-                if(view_source == VIEW_SOURCE.ALL_ORDERS_SOURCE)
-                {
+                if (view_source == VIEW_SOURCE.ALL_ORDERS_SOURCE) {
                     userProfilePic = listItem.findViewById(R.id.profile_image);
-                    Picasso.with(uiActivity.getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
-                    Button btn = listItem.findViewById(R.id.orderBtn);
+                    Picasso.with(uiActivity.getApplicationContext()).load(currentItem.getUserImage()).into(userProfilePic);
                     amountTextView = listItem.findViewById(R.id.list_item_amount);
                     nameTextView.setTextSize(18);
                     priceTextView.setTextSize(15);
-                    amountTextView.setText("X "+ currentItem.getAmount());
-                    amountTextView.setTextColor(Color.rgb(1,88,0));
+                    amountTextView.setText("X " + currentItem.getAmount());
+                    amountTextView.setTextColor(Color.rgb(1, 88, 0));
                     amountTextView.setTypeface(itemFont);
                     amountTextView.setTextSize(15);
                 }
@@ -167,14 +172,14 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
 
             case HEADER:
                 //If the Current product is a header
-                listItem.setPadding(0,50,0,0);
+                listItem.setPadding(0, 50, 0, 0);
                 nameTextView.setTextSize(40);
                 nameTextView.setTextColor(Color.RED);
                 nameTextView.setTypeface(headerFont);
                 priceTextView = listItem.findViewById(R.id.list_item_price);
                 priceTextView.setText(" ");
 
-                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE) {
                     listItem.findViewById(R.id.addItemBtn).setVisibility(View.GONE);
                     nameTextView.setTextSize(28);
                 }
@@ -182,14 +187,14 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                 break;
 
             case TOPIC:
-                listItem.setPadding(0,50,0,0);
+                listItem.setPadding(0, 50, 0, 0);
                 nameTextView.setTextSize(40);
                 nameTextView.setTextColor(Color.BLUE);
                 nameTextView.setTypeface(topicFont);
                 priceTextView = listItem.findViewById(R.id.list_item_price);
                 priceTextView.setText(" ");
 
-                if(view_source == VIEW_SOURCE.TABLE_SOURCE){
+                if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE) {
                     listItem.findViewById(R.id.addItemBtn).setVisibility(View.GONE);
                     nameTextView.setTextSize(32);
                 }
@@ -200,7 +205,7 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
         return listItem;
     }
 
-    private void setFont(){
+    private void setFont() {
         topicFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/BreeSerif-Regular.ttf");
         headerFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/Jua-Regular.ttf");
         itemFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "font/GloriaHallelujah.ttf");
