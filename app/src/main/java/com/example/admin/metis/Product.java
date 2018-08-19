@@ -1,5 +1,7 @@
 package com.example.admin.metis;
 
+import android.net.Uri;
+
 public class Product {
 
     enum PRODUCT_TYPE {TOPIC, HEADER, ITEM };
@@ -8,12 +10,21 @@ public class Product {
     private String price;
     private PRODUCT_TYPE product_type;
     private String amount;
+    private Uri userImage;
 
     public Product(String name, String price, PRODUCT_TYPE product_type,String amount){
         this.name = name;
         this.price = price;
         this.product_type = product_type;
         this.amount = amount;
+    }
+
+    public void setUserImage(Uri userImage){
+        this.userImage = userImage;
+    }
+
+    public Uri getUserImage(){
+        return userImage;
     }
 
     public String getAmount() {

@@ -33,6 +33,7 @@ public class TableOrderFragment extends Fragment {
     private static final String TABLE_NODE = "Tables";
     private static final String USERS_NODE = "Users";
     private static final String ORDERS_NODE = "Orders";
+    private static final String DETAILS_NODE = "Details";
     private final static String TAG = "Metis-Application: ";
 
     private ListView listView;
@@ -50,12 +51,7 @@ public class TableOrderFragment extends Fragment {
     private TextView totalPriceTextView;
     private static double totalPrice = 0;
 
-
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public TableOrderFragment() {
-        // Required empty public constructor
-    }
+    public TableOrderFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,6 @@ public class TableOrderFragment extends Fragment {
         setButtonsEvents();
 
         productsList = new ArrayList<>();
-
         getItemsFromDB();
 
         return view;
@@ -119,47 +114,82 @@ public class TableOrderFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String userId = dataSnapshot.getKey();
+
                 if(!dataSnapshot.hasChild(ORDERS_NODE))
                 {
                     Toast.makeText(getContext(),"No orders by user made",Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 Map<String, Map<String, Object>> currentUserNodesMap = (Map) dataSnapshot.getValue();
 
-                //Node For - Details/Orders
-                for (String node : currentUserNodesMap.keySet()) {
+                Map<String, Object> currentUserDetailsMap = currentUserNodesMap.get(DETAILS_NODE);
+                userPhotoUrl = Uri.parse(currentUserDetailsMap.get("image").toString());
 
-                    Map<String, Object> currentUserDataMap = currentUserNodesMap.get(node);
+                Map<String, Object> currentUserOrdersMap = currentUserNodesMap.get(ORDERS_NODE);
+                for (String attr : currentUserOrdersMap.keySet()) {
+                    String[] values = new String[2];
+                    int i = 0;
 
-                    if (node.equals("Details")) {
-                        userPhotoUrl = Uri.parse(currentUserDataMap.get("image").toString());
-                    } else {
-                        //Current User Orders For
-                        for (String attr : currentUserDataMap.keySet()) {
-                            String[] values = new String[2];
-                            int i = 0;
+                    String itemName = attr;
 
-                            String itemName = attr;
+                    Map<String, String> currentUserOrderMap = (Map) currentUserOrdersMap.get(attr);
 
-                            Map<String, String> currentUserOrderMap = (Map) currentUserDataMap.get(attr);
-
-                            //Current Item attributes : amount/price
-                            for (String valueName : currentUserOrderMap.keySet()) {
-                                values[i] = currentUserOrderMap.get(valueName);
-                                i++;
-                            }
-
-                            //Extract the price of the item
-                            String price = values[1].split(" ")[0];
-                            //Added the current item price to total price (multiply by the order amount of the specific item)
-                            totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
-
-                            Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
-                            productsList.add(currentProduct);
-
-                        }    //end - Current User Qrders For
+                    //Current Item attributes : amount/price
+                    for (String valueName : currentUserOrderMap.keySet()) {
+                        values[i] = currentUserOrderMap.get(valueName);
+                        i++;
                     }
-                }// end - Node For
+
+                    //Extract the price of the item
+                    String price = values[1].split(" ")[0];
+                    //Added the current item price to total price (multiply by the order amount of the specific item)
+                    totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
+
+                    Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+                    currentProduct.setUserImage(userPhotoUrl);
+                    productsList.add(currentProduct);
+
+                }    //end - Current Us
+
+
+
+//
+//                //Node For - Details/Orders
+//                for (String node : currentUserNodesMap.keySet()) {
+//
+//                    Map<String, Object> currentUserDataMap = currentUserNodesMap.get(node);
+//
+//                    if (node.equals("Details")) {
+//                        userPhotoUrl = Uri.parse(currentUserDataMap.get("image").toString());
+//                    } else {
+//                        //Current User Orders For
+//                        for (String attr : currentUserDataMap.keySet()) {
+//                            String[] values = new String[2];
+//                            int i = 0;
+//
+//                            String itemName = attr;
+//
+//                            Map<String, String> currentUserOrderMap = (Map) currentUserDataMap.get(attr);
+//
+//                            //Current Item attributes : amount/price
+//                            for (String valueName : currentUserOrderMap.keySet()) {
+//                                values[i] = currentUserOrderMap.get(valueName);
+//                                i++;
+//                            }
+//
+//                            //Extract the price of the item
+//                            String price = values[1].split(" ")[0];
+//                            //Added the current item price to total price (multiply by the order amount of the specific item)
+//                            totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
+//
+//                            Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+//                            currentProduct.setUserImage(userPhotoUrl);
+//                            productsList.add(currentProduct);
+//
+//                        }    //end - Current User Qrders For
+//                    }
+//                }// end - Node For
 
                 totalPriceTextView.setText("TOTAL PRICE : " + totalPrice + " ILS");
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),productsList ,
