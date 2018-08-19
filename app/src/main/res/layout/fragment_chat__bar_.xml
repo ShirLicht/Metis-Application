@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ChatStatusBarFragment"
+    tools:context=".OnlineUsersFragment"
     android:background="@drawable/new_chat"
     android:backgroundTint="#80FFFFFF"
     android:backgroundTintMode="src_over">

@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ChatRequestsFragment extends Fragment {
+public class PeopleReviewsFragment extends Fragment {
 
-    public ChatRequestsFragment() {
+    public PeopleReviewsFragment() {
         // Required empty public constructor
     }
 
@@ -22,7 +22,7 @@ public class ChatRequestsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat_requests, container, false);
+        return inflater.inflate(R.layout.fragment_pepole_reviews, container, false);
     }
 
 }
