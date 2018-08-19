@@ -24,7 +24,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return new FoodMenuFragment();
                     case BAR_CHAT:
-                        return new ChatBarFragment();
+                        return new ChatStatusBarFragment();
                     case BAR_TABLE:
                         return new FullMenuFragment();
                 }
