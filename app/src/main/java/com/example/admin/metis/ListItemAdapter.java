@@ -120,6 +120,12 @@ public class ListItemAdapter extends ArrayAdapter<Product>{
                     amountTextView.setTypeface(itemFont);
 
                     Button btn = listItem.findViewById(R.id.deleteItemBtn);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //delete item from db + userOrderFragment
+                        }
+                    });
                 }
 
                 if(view_source == VIEW_SOURCE.TABLE_SOURCE){
