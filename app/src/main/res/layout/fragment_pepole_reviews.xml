@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:siBorderColor="@color/darkgray"
+            app:siBorderColor="@android:color/background_dark"
             app:siBorderWidth="8dp" />
 
     </android.support.constraint.ConstraintLayout>
