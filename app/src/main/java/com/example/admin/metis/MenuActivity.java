@@ -58,11 +58,12 @@ public class MenuActivity extends AppCompatActivity {
 
         getBarName();
         bindUI();
+        firebaseAuth = FirebaseAuth.getInstance();
         getUserInfo();
         setUIParams();
-        firebaseAuth = FirebaseAuth.getInstance();
         signUserToBar();
         btnEvents();
+        getBarImage();
     }
 
     private void getBarName(){

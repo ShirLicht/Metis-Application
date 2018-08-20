@@ -72,11 +72,13 @@ public class UserOrderFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, " UserOrderFragment: onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, " UserOrderFragment: onCreateView");
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_order, container, false);
 
@@ -113,6 +115,7 @@ public class UserOrderFragment extends Fragment {
     }
 
     public void getItemsFromDB() {
+        Log.i(TAG, " UserOrderFragment: getItemsFromDB");
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(TABLE_NODE).child(TABLE)
                 .child(USERS_NODE).child(userId).child(ORDERS_NODE);
@@ -121,7 +124,6 @@ public class UserOrderFragment extends Fragment {
         listener = databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG, "UserOrderFragment: getItemsFromDB : onChildAdded");
                 String itemName = dataSnapshot.getKey();
                 productsIndexMap.put(itemName, indexCounter++);
                 String[] values = new String[2];
@@ -153,7 +155,6 @@ public class UserOrderFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG, "UserOrderFragment: getItemsFromDB : onChildChanged");
                 String itemName = dataSnapshot.getKey();
                 String[] values = new String[2];
                 int i = 0;
@@ -171,17 +172,12 @@ public class UserOrderFragment extends Fragment {
                     //checks if to remove the product/item from the listView and database.
                     if (Integer.parseInt(values[0]) == 0) {
                         indexCounter -= 1;
-                        Log.i(TAG,"if- before, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
                         itemsList.remove((int) productsIndexMap.get(itemName));
-                        Log.i(TAG,"if - after");
                         databaseReference.child(itemName).removeValue();
                         refreashIndexMap();
-                        Log.i(TAG,"if- after after, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
                     } else {
                         Item currentProduct = new Item(itemName, values[1], Item.ITEM_TYPE.PRODUCT, values[0]);
-                        Log.i(TAG,"else - before, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
                         itemsList.set(productsIndexMap.get(itemName), currentProduct);
-                        Log.i(TAG,"else - after");
                     }
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
@@ -241,7 +237,6 @@ public class UserOrderFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        //getItemsFromDB();
     }
 
 

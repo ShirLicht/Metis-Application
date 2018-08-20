@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +60,12 @@ public class TableOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, " TableOrderFragment: onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, " TableOrderFragment: onCreateView");
         View view = inflater.inflate(R.layout.fragment_table_order, container, false);
         bindUI(view);
         setButtonsEvents();
@@ -72,6 +75,11 @@ public class TableOrderFragment extends Fragment {
 
         return view;
 
+    }
+
+    public void onResume(){
+        super.onResume();
+        Log.i(TAG, " TableOrderFragment: onResume");
     }
 
     private void bindUI(View view){
@@ -120,7 +128,7 @@ public class TableOrderFragment extends Fragment {
 
                 if(!dataSnapshot.hasChild(ORDERS_NODE))
                 {
-                    Toast.makeText(getContext(),"No orders by user made",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"No orders made by user",Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -184,6 +192,15 @@ public class TableOrderFragment extends Fragment {
 
 
 
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser)
+            Log.i(TAG, "Fragment is visible.");
 
     }
 

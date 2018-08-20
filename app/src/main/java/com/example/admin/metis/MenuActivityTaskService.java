@@ -10,18 +10,8 @@ import android.os.IBinder;
 
 public class MenuActivityTaskService extends Service {
 
-//    private static final String TAG = "Metis-Application: ";
-//    private static final String USERS_NODE = "Users";
-//    private static final String USER_ID = "userId";
-//    private FirebaseDatabase firebaseDatabase;
-//    private DatabaseReference databaseReference;
-//    private String userId;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        userId = intent.getStringExtra(USER_ID);
-//        firebaseDatabase = FirebaseDatabase.getInstance();
-//        databaseReference = firebaseDatabase.getReference().child(BAR_NAME).child(USERS_NODE).child(userId);
         return START_STICKY;
     }
 
