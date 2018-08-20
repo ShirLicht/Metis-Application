@@ -58,21 +58,33 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private static final String TAG = "Metis-Application: ";
     private static final String DB_Url = "https://metis-application.firebaseio.com";
 
+
+
+    //Firebase Variables
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseRef;
-    private Button logoutBtn;
+
+
+    //Google & Map Variables
     private static  GoogleMap map;
+    private LocationService locationService;
+    private SupportMapFragment mapFragment;
+
     private MarkerOptions userMarker;
     private Map<String,MarkerOptions> barsContainer;
 
-    private LocationService locationService;
-    private Intent locationServiceIntent;
-    private String userName, providerId;
-    private Uri userPhotoUrl;
+    //UI Variables
     private TextView userNameTxt;
     private TextView barSearch;
     private CircleImageView userProfilePic;
-    private SupportMapFragment mapFragment;
+    private Button logoutBtn;
+
+    //General Activity Variables
+    private Intent locationServiceIntent;
+    private String userName, providerId;
+    private Uri userPhotoUrl;
+
+
     private Activity uiActivity;
     private boolean changeLocationFlag = false;
     // LatLng searchedBarLocation;

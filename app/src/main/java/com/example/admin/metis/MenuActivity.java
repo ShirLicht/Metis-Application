@@ -4,6 +4,7 @@ package com.example.admin.metis;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -32,14 +35,19 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TABLE_NODE = "Tables";
    // private static final String USER_ID = "userId";
 
+    //UI Variables
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
     private String userName, userId, providerId;
-    private Uri userPhotoUrl;
+    private Uri userPhotoUrl,barPhotoUrl ;
     private TextView userNameTxt, barNameTxt;
     private CircleImageView userProfilePic;
+    private ConstraintLayout layout;
+
+    //Firebase Variables
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+
     static String BAR_NAME;
     static String TABLE;
 
@@ -48,27 +56,19 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        if(getIntent().getStringExtra(BAR_NAME_EXTRA) != null)
-            BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
-
-
+        getBarName();
         bindUI();
-        barNameTxt.setText(BAR_NAME);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
         getUserInfo();
-
+        setUIParams();
+        firebaseAuth = FirebaseAuth.getInstance();
         signUserToBar();
-
         btnEvents();
-
-        //user name & profile image from facebook account
-        userNameTxt.setText(userName);
-        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
-
     }
 
+    private void getBarName(){
+        if(getIntent().getStringExtra(BAR_NAME_EXTRA) != null)
+            BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
+    }
     private void getUserInfo()
     {
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -85,6 +85,28 @@ public class MenuActivity extends AppCompatActivity {
                 userPhotoUrl = profile.getPhotoUrl();
             }
         }
+    }
+
+    private void getBarImage(){
+
+        switch(BAR_NAME){
+            case "Shame-Bar":
+                layout.setBackgroundResource(R.drawable.shame_bar);
+                break;
+            case "The Crazy Rabbit":
+                layout.setBackgroundResource(R.drawable.crazy_rabbits_bar);
+                break;
+        }
+
+    }
+
+    private void setUIParams(){
+
+        barNameTxt.setText(BAR_NAME);
+
+        //user name & profile image from facebook account
+        userNameTxt.setText(userName);
+        Picasso.with(getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
     }
 
     private void signUserToBar(){
@@ -122,6 +144,7 @@ public class MenuActivity extends AppCompatActivity {
         userProfilePic = findViewById(R.id.profile_image);
         logoutBtn = findViewById(R.id.SignOutBtn);
         barNameTxt = findViewById(R.id.barNameTxtView);
+        layout = (ConstraintLayout) findViewById(R.id.menuActivityLayout);
     }
 
     public void btnEvents(){

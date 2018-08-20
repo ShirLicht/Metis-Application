@@ -40,7 +40,6 @@ public class UserOrderFragment extends Fragment {
     private static final String ORDERS_NODE = "Orders";
     private final static String TAG = "Metis-Application: ";
 
-    static double toatalPrice = 0;
 
     //UI Variables
     private String userName, providerId, userId;
@@ -48,15 +47,17 @@ public class UserOrderFragment extends Fragment {
     private TextView userNameTxt;
     private CircleImageView userProfilePic;
     private View view;
-
-    private ListView listView;
-    private ListItemAdapter listItemAdapter;
     private TextView totalPriceTextView;
 
-
-    private static Map<String, Integer> productsIndexMap;
+   //List Variables
+    private ListView listView;
+    private ListItemAdapter listItemAdapter;
     private static ArrayList<Item> itemsList;
+
+    //General Variables
+    private static Map<String, Integer> productsIndexMap;
     private static int indexCounter = 0;
+    static double toatalPrice = 0;
 
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
@@ -78,14 +79,12 @@ public class UserOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_user_order, container, false);
-        firebaseAuth = FirebaseAuth.getInstance();
+
         listView = view.findViewById(R.id.User_Orders_ListView);
+        initVariables();
         getUserInfo();
         bindUI();
         setUIUserInfo();
-
-        productsIndexMap = new HashMap<>();
-        itemsList = new ArrayList<>();
         getItemsFromDB();
 
         return view;
@@ -105,6 +104,12 @@ public class UserOrderFragment extends Fragment {
                 userPhotoUrl = profile.getPhotoUrl();
             }
         }
+    }
+
+    public void initVariables(){
+        firebaseAuth = FirebaseAuth.getInstance();
+        productsIndexMap = new HashMap<>();
+        itemsList = new ArrayList<>();
     }
 
     public void getItemsFromDB() {

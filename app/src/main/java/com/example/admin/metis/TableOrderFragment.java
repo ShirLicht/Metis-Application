@@ -36,9 +36,9 @@ public class TableOrderFragment extends Fragment {
     private static final String DETAILS_NODE = "Details";
     private final static String TAG = "Metis-Application: ";
 
+    //List Variables
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-
     ArrayList<Item> productsList;
 
     //Firebase Variables
@@ -46,9 +46,12 @@ public class TableOrderFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
+    //UI Variables
     private Uri userPhotoUrl;
     private Button waitressBtn, orderBtn, billBtn;
     private TextView totalPriceTextView;
+
+    //General Variables
     private static double totalPrice = 0;
 
     public TableOrderFragment() { }
