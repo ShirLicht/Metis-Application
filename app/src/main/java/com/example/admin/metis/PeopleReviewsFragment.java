@@ -85,7 +85,7 @@ public class PeopleReviewsFragment extends Fragment {
                     reviewsList.add(currentReview);
                 }
 
-                listItemAdapter = new ReviewListItemAdapter(getActivity().getApplicationContext(),reviewsList ,(ChatActivity) getActivity());
+                listItemAdapter = new ReviewListItemAdapter(getActivity().getApplicationContext(),reviewsList ,(ReviewActivity) getActivity());
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
             }

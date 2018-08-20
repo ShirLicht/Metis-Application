@@ -29,7 +29,7 @@ public class FullMenuFragment extends Fragment {
     private final static String DB_URL = "https://metis-application.firebaseio.com/";
     private final static String MENU_PASS = "/Menu";
 
-    private DatabaseReference mRef;
+    private DatabaseReference databaseReference;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
 
@@ -40,7 +40,7 @@ public class FullMenuFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRef = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + BAR_NAME + MENU_PASS);
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + BAR_NAME + MENU_PASS);
         productsList = new ArrayList<>();
         Log.i(TAG,"FullMenuFragment: onCreate()");
         importMenu();
@@ -58,7 +58,7 @@ public class FullMenuFragment extends Fragment {
     }
 
     private void importMenu() {
-        mRef.addChildEventListener(new ChildEventListener() {
+        databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 //Log.i(TAG,"extract the " + dataSnapshot.getKey() + " items");

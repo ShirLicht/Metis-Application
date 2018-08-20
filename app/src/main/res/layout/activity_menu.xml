@@ -67,7 +67,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/button_border"
         android:fontFamily="@font/architects_daughter"
-        android:text="CHAT"
+        android:text="REVIEWS"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"

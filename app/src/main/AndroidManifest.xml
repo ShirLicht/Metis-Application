@@ -43,7 +43,7 @@
             android:label="@string/title_activity_bar_m"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".ReviewActivity" />
         <activity
             android:name=".TableActivity"
             android:label="@string/title_activity_table"

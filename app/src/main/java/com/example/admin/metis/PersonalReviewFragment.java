@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,13 +36,13 @@ public class PersonalReviewFragment extends Fragment {
     private final static String TAG = "Metis-Application: ";
 
 
-    private String review, reviewTitle, userId, userName, providerId;
+    private String review, userId, userName, providerId;
     private Uri userPhotoUrl;
     private EditText reviewEditText, rateEditText;
     private int rate;
     private View view;
     private Button submitBtn;
-    private static int currentReviewNum;
+    private int currentReviewNum;
 
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
@@ -81,13 +82,21 @@ public class PersonalReviewFragment extends Fragment {
             public void onClick(View view) {
                 try{
                     review = reviewEditText.getText().toString();
-                    if(review.equals(""))
+                    if(review.equals("")){
+                        Toast.makeText(getActivity(), "Please fill the review before pressed submit", Toast.LENGTH_LONG).show();
                         return;
+                    }
                     rate = Integer.parseInt(rateEditText.getText().toString());
+                    if(rate > 5 || rate < 0 || (rateEditText.getText().toString().equals(""))){
+                        Toast.makeText(getActivity(), "Please enter a rate low than 5 and greater than 0", Toast.LENGTH_LONG).show();
+                        rateEditText.setText("");
+                        return;
+                    }
                     saveReviewToDB();
                 }
                 catch(Exception ex) {
-
+                    Toast.makeText(getActivity(), "Please enter number between 0 to 5", Toast.LENGTH_LONG).show();
+                    rateEditText.setText("");
                 }
             }
         });
@@ -120,8 +129,7 @@ public class PersonalReviewFragment extends Fragment {
                if(dataSnapshot.getKey().equals(REVIEWS_COUNTER_NODE))
                {
                    String reviewsCounter = dataSnapshot.getValue().toString();
-                   currentReviewNum = Integer.parseInt(reviewsCounter);
-                   currentReviewNum++;
+                   currentReviewNum = Integer.parseInt(reviewsCounter) + 1;
                    databaseReference.child(REVIEWS_COUNTER_NODE).setValue(currentReviewNum+ "");
                    saveReview("Review " + currentReviewNum);
                    reviewEditText.setText("");

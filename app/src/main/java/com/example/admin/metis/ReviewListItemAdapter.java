@@ -18,11 +18,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ReviewListItemAdapter extends ArrayAdapter<Review> {
     private Context context;
     private ArrayList<Review> itemsList;
-    private ChatActivity uiActivity;
+    private ReviewActivity uiActivity;
 
 
 
-    public ReviewListItemAdapter(Context context, ArrayList<Review> itemsList, @Nullable ChatActivity uiActivity) {
+    public ReviewListItemAdapter(Context context, ArrayList<Review> itemsList, @Nullable ReviewActivity uiActivity) {
         super(context, 0, itemsList);
         this.context = context;
         this.itemsList = itemsList;
@@ -45,7 +45,7 @@ public class ReviewListItemAdapter extends ArrayAdapter<Review> {
         Picasso.with(uiActivity.getApplicationContext()).load(currentReview.getImage()).into(userProfilePic);
 
         TextView reviewTextView = listItem.findViewById(R.id.list_item_review);
-        nameTextView.setText(currentReview.getReview());
+        reviewTextView.setText(currentReview.getReview());
 
         starsToFill = currentReview.getRate();
 
@@ -58,7 +58,7 @@ public class ReviewListItemAdapter extends ArrayAdapter<Review> {
         starImageView5 = listItem.findViewById(R.id.starImageView5);
 
         if(starsToFill>0) {
-            for (currentStar = 0; currentStar < starsToFill; currentStar++) {
+            for (currentStar = 1; currentStar <= starsToFill; currentStar++) {
                 switch (currentStar) {
                     case 1:
                         starImageView1.setImageResource(R.drawable.gold);

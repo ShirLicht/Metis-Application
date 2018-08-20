@@ -114,6 +114,7 @@ public class UserOrderFragment extends Fragment {
          listener = databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG,"UserOrderFragment: getItemsFromDB : onChildAdded");
                 String itemName = dataSnapshot.getKey();
                 productsIndexMap.put(itemName, indexCounter++);
                 String[] values = new String[2];
@@ -126,12 +127,6 @@ public class UserOrderFragment extends Fragment {
                         values[i] = map.get(attr);
                         i++;
                     }
-
-                    //Extract the price of the item
-                    String price = values[1].split(" ")[0];
-                    //Added the current item price to total price
-                    //toatalPrice += (Integer.parseInt(price) * Integer.parseInt(values[0]));
-
 
                     Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
                     productsList.add(currentProduct);
@@ -151,6 +146,7 @@ public class UserOrderFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG,"UserOrderFragment: getItemsFromDB : onChildChanged");
                 String itemName = dataSnapshot.getKey();
                 String[] values = new String[2];
                 int i = 0;

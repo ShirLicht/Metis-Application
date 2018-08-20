@@ -56,7 +56,7 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
         this.userPhotoUrl = userPhotoUrl;
 
         //  Only in the first create of listView to initialize the amountMap -> contains how many time each product has been ordered.
-        if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE && (Counter < NUM_OF_TOPICS)) {
+        if (view_source == VIEW_SOURCE.TABLE_MENU_SOURCE && (Counter <= NUM_OF_TOPICS)) {
             initProductsAmountMap();
             Counter++;
         }
@@ -79,8 +79,6 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
         TextView priceTextView;
         setFont();
 
-        // if(listItem == null)
-        //listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item,parent,false);
         switch (this.view_source) {
             case MENU_SOURCE:
                 listItem = LayoutInflater.from(context).inflate(R.layout.menu_list_bar_item, parent, false);

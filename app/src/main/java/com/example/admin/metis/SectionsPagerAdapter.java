@@ -69,7 +69,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return "FOOD";
                     case BAR_CHAT:
-                        return "GENERAL CHAT";
+                        return "ONLINE USERS";
                     case BAR_TABLE:
                         return "MENU";
                 }
@@ -79,7 +79,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return "ALCOHOLIC DRINKS";
                     case BAR_CHAT:
-                        return "PERSONAL CHAT";
+                        return "ADD REVIEW";
                     case BAR_TABLE:
                         return "MY ORDER";
                 }
@@ -89,7 +89,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                     case BAR_MENU:
                         return "NON ALCOHOLIC DRINKS";
                     case BAR_CHAT:
-                        return "CHAT REQUESTS";
+                        return "ALL REVIEWS";
                     case BAR_TABLE:
                         return "TABLE ORDER";
                 }

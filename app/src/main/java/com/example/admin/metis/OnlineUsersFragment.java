@@ -88,7 +88,7 @@ public class OnlineUsersFragment extends Fragment {
                 productsList.add(currentUser);
 
 
-                listItemAdapter = new UserListItemAdapter(getActivity().getApplicationContext(),productsList, (ChatActivity) getActivity());
+                listItemAdapter = new UserListItemAdapter(getActivity().getApplicationContext(),productsList, (ReviewActivity) getActivity());
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
 

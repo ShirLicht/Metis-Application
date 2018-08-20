@@ -70,8 +70,6 @@ public class TableActivity extends AppCompatActivity {
         signUserToTable();
 
         initTabsView();
-
-
     }
 
 
