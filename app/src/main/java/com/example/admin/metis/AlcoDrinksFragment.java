@@ -31,7 +31,7 @@ public class AlcoDrinksFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-    ArrayList<Product> productsList;
+    ArrayList<Item> itemsList;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -44,7 +44,7 @@ public class AlcoDrinksFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        productsList = new ArrayList<>();
+       itemsList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_alco_drinks, container, false);
         listView =  view.findViewById(R.id.listView);
 
@@ -52,14 +52,14 @@ public class AlcoDrinksFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String foodType = dataSnapshot.getKey();
-                productsList.add(new Product(foodType," ", Product.PRODUCT_TYPE.HEADER, "0"));
+                itemsList.add(new Item(foodType," ", Item.ITEM_TYPE.HEADER, "0"));
                 Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
 
                 for(String key : map.keySet())
-                    productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM, "0"));
+                    itemsList.add(new Item(key, (String)map.get(key), Item.ITEM_TYPE.PRODUCT, "0"));
 
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext()
-                        ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null, null);
+                        ,itemsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null, null);
                 listView.setAdapter(listItemAdapter);
                 listItemAdapter.notifyDataSetChanged();
             }

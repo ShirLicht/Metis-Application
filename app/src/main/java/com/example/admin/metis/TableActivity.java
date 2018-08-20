@@ -44,7 +44,6 @@ public class TableActivity extends AppCompatActivity {
     private ArrayList<String> productsNames;
 
 
-
     //ViewPager set the content of the tabs
     private ViewPager viewPager;
 

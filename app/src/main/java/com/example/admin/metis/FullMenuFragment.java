@@ -33,7 +33,7 @@ public class FullMenuFragment extends Fragment {
     private ListView listView;
     private ListItemAdapter listItemAdapter;
 
-    ArrayList<Product> productsList;
+    ArrayList<Item> itemsList;
 
     public FullMenuFragment() {}
 
@@ -41,7 +41,7 @@ public class FullMenuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(DB_URL + BAR_NAME + MENU_PASS);
-        productsList = new ArrayList<>();
+        itemsList = new ArrayList<>();
         Log.i(TAG,"FullMenuFragment: onCreate()");
         importMenu();
     }
@@ -61,20 +61,19 @@ public class FullMenuFragment extends Fragment {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Log.i(TAG,"extract the " + dataSnapshot.getKey() + " items");
 
                 //added items topic header to the view
                 String menuTopicName = dataSnapshot.getKey().replaceAll("_"," ");
-                Product currentTopicProducts = new Product(menuTopicName, "", Product.PRODUCT_TYPE.TOPIC,"0");
-                productsList.add(currentTopicProducts);
+                Item currentTopicProducts = new  Item(menuTopicName, "",  Item.ITEM_TYPE.TOPIC,"0");
+                itemsList.add(currentTopicProducts);
 
                 try {
                     Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) dataSnapshot.getValue();
                     for (String header : map.keySet()) {
 
                         //added type of items header to the view
-                        Product currentHeaderProducts = new Product(header, " ", Product.PRODUCT_TYPE.HEADER,"0");
-                        productsList.add(currentHeaderProducts);
+                       Item currentHeaderProducts = new Item(header, " ", Item.ITEM_TYPE.HEADER,"0");
+                        itemsList.add(currentHeaderProducts);
 
                         Map<String, Object> infoProductMap = map.get(header);
 
@@ -86,7 +85,7 @@ public class FullMenuFragment extends Fragment {
                             ((TableActivity)getActivity()).addNameToProductsNames(currentItemName);
 
                             String currentItemPrice = (String) (infoProductMap.get(itemName));
-                            productsList.add(new Product(currentItemName, currentItemPrice, Product.PRODUCT_TYPE.ITEM,"0"));
+                            itemsList.add(new Item(currentItemName, currentItemPrice, Item.ITEM_TYPE.PRODUCT,"0"));
                         }
 
                     }
@@ -124,7 +123,7 @@ public class FullMenuFragment extends Fragment {
     private void initListView(){
         //Updated the view
         listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                productsList, ListItemAdapter.VIEW_SOURCE.TABLE_MENU_SOURCE, (TableActivity)getActivity(), null);
+               itemsList, ListItemAdapter.VIEW_SOURCE.TABLE_MENU_SOURCE, (TableActivity)getActivity(), null);
         listView.setAdapter(listItemAdapter);
         listItemAdapter.notifyDataSetChanged();
     }

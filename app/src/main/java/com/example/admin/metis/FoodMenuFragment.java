@@ -30,7 +30,7 @@ public class FoodMenuFragment extends Fragment {
     private DatabaseReference mRef;
     private ListView listView;
     private ListItemAdapter listItemAdapter;
-    ArrayList<Product> productsList;
+    ArrayList<Item> productsList;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -51,11 +51,11 @@ public class FoodMenuFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 String foodType = dataSnapshot.getKey();
-                productsList.add(new Product(foodType," ",Product.PRODUCT_TYPE.HEADER, "0"));
+                productsList.add(new Item(foodType," ",Item.ITEM_TYPE.HEADER, "0"));
                 Map<String,Object> map = (Map<String,Object>)dataSnapshot.getValue();
 
                 for(String key : map.keySet())
-                    productsList.add(new Product(key, (String)map.get(key), Product.PRODUCT_TYPE.ITEM,"0"));
+                    productsList.add(new Item(key, (String)map.get(key), Item.ITEM_TYPE.PRODUCT,"0"));
 
                 listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext()
                         ,productsList, ListItemAdapter.VIEW_SOURCE.MENU_SOURCE, null, null);

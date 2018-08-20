@@ -2,20 +2,20 @@ package com.example.admin.metis;
 
 import android.net.Uri;
 
-public class Product {
+public class Item {
 
-    enum PRODUCT_TYPE {TOPIC, HEADER, ITEM };
+    enum ITEM_TYPE {TOPIC, HEADER, PRODUCT };
 
     private String name;
     private String price;
-    private PRODUCT_TYPE product_type;
+    private ITEM_TYPE item_type;
     private String amount;
     private Uri userImage;
 
-    public Product(String name, String price, PRODUCT_TYPE product_type,String amount){
+    public Item(String name, String price, ITEM_TYPE item_type,String amount){
         this.name = name;
         this.price = price;
-        this.product_type = product_type;
+        this.item_type = item_type;
         this.amount = amount;
     }
 
@@ -51,8 +51,8 @@ public class Product {
         this.price = price;
     }
 
-    public PRODUCT_TYPE getProductType() {
-        return product_type;
+    public ITEM_TYPE getProductType() {
+        return item_type;
     }
 
 

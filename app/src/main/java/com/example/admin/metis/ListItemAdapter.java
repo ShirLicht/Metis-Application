@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ListItemAdapter extends ArrayAdapter<Product> {
+public class ListItemAdapter extends ArrayAdapter<Item> {
 
     enum VIEW_SOURCE {TABLE_MENU_SOURCE, MENU_SOURCE, USER_SOURCE, ALL_ORDERS_SOURCE}
 
@@ -39,7 +39,7 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
     private Typeface topicFont, headerFont, itemFont;
 
     private Context context;
-    private ArrayList<Product> itemsList;
+    private ArrayList<Item> itemsList;
     private TableActivity uiActivity;
     private static HashMap<String, Integer> productsAmountMap = new HashMap<>();
 
@@ -47,7 +47,7 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
     private Uri userPhotoUrl;
     private TextView amountTextView;
 
-    public ListItemAdapter(Context context, ArrayList<Product> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity, Uri userPhotoUrl) {
+    public ListItemAdapter(Context context, ArrayList<Item> itemsList, VIEW_SOURCE view_source, @Nullable TableActivity uiActivity, Uri userPhotoUrl) {
         super(context, 0, itemsList);
         this.context = context;
         this.itemsList = itemsList;
@@ -94,14 +94,15 @@ public class ListItemAdapter extends ArrayAdapter<Product> {
                 break;
         }
 
-        final Product currentItem = itemsList.get(position);
+        final Item currentItem = itemsList.get(position);
         TextView nameTextView = listItem.findViewById(R.id.list_item_name);
         nameTextView.setText(currentItem.getName());
 
 
         switch (currentItem.getProductType()) {
 
-            case ITEM:
+            case PRODUCT:
+
                 //The current Product is a listItem with price
                 listItem.setPadding(0, 0, 0, 0);
                 nameTextView.setTextSize(20);

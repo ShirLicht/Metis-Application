@@ -40,7 +40,7 @@ public class UserOrderFragment extends Fragment {
     private static final String ORDERS_NODE = "Orders";
     private final static String TAG = "Metis-Application: ";
 
-   static double toatalPrice = 0;
+    static double toatalPrice = 0;
 
     //UI Variables
     private String userName, providerId, userId;
@@ -54,9 +54,9 @@ public class UserOrderFragment extends Fragment {
     private TextView totalPriceTextView;
 
 
-    Map<String, Integer> productsIndexMap;
-    ArrayList<Product> productsList;
-    int indexCounter = 0;
+    private static Map<String, Integer> productsIndexMap;
+    private static ArrayList<Item> itemsList;
+    private static int indexCounter = 0;
 
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
@@ -72,19 +72,21 @@ public class UserOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        productsIndexMap = new HashMap<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        productsList = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_user_order, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
         listView = view.findViewById(R.id.User_Orders_ListView);
         getUserInfo();
         bindUI();
         setUIUserInfo();
+
+        productsIndexMap = new HashMap<>();
+        itemsList = new ArrayList<>();
+        getItemsFromDB();
 
         return view;
     }
@@ -111,10 +113,10 @@ public class UserOrderFragment extends Fragment {
                 .child(USERS_NODE).child(userId).child(ORDERS_NODE);
         toatalPrice = 0;
 
-         listener = databaseReference.addChildEventListener(new ChildEventListener() {
+        listener = databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG,"UserOrderFragment: getItemsFromDB : onChildAdded");
+                Log.i(TAG, "UserOrderFragment: getItemsFromDB : onChildAdded");
                 String itemName = dataSnapshot.getKey();
                 productsIndexMap.put(itemName, indexCounter++);
                 String[] values = new String[2];
@@ -128,25 +130,25 @@ public class UserOrderFragment extends Fragment {
                         i++;
                     }
 
-                    Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
-                    productsList.add(currentProduct);
+                    Item currentProduct = new Item(itemName, values[1], Item.ITEM_TYPE.PRODUCT, values[0]);
+                    itemsList.add(currentProduct);
 
                     totalPriceTextView.setText("TOTAL PRICE : " + toatalPrice + " ILS");
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
+                            itemsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
 
 
                 } catch (Exception ex) {
-                    Log.e(TAG, "UserOrderFragment: import items error :" + ex.getMessage());
+                    Log.e(TAG, "UserOrderFragment-onChildADD: import items error :" + ex.getMessage());
                 }
 
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG,"UserOrderFragment: getItemsFromDB : onChildChanged");
+                Log.i(TAG, "UserOrderFragment: getItemsFromDB : onChildChanged");
                 String itemName = dataSnapshot.getKey();
                 String[] values = new String[2];
                 int i = 0;
@@ -159,31 +161,31 @@ public class UserOrderFragment extends Fragment {
                         i++;
                     }
 
-                    //Extract the price of the item
-                    String price = values[1].split(" ")[0];
-                    //Added the current item price to total price
-                    // toatalPrice += (Integer.parseInt(price));
                     totalPriceTextView.setText("TOTAL PRICE : " + toatalPrice + " ILS");
 
-
                     //checks if to remove the product/item from the listView and database.
-                    if(Integer.parseInt(values[0]) == 0){
-                        productsList.remove((int) productsIndexMap.get(itemName));
-                        Log.i(TAG,"values [0] = " + Integer.parseInt(values[0]) + ", productList size : " + productsList.size());
+                    if (Integer.parseInt(values[0]) == 0) {
+                        indexCounter -= 1;
+                        Log.i(TAG,"if- before, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
+                        itemsList.remove((int) productsIndexMap.get(itemName));
+                        Log.i(TAG,"if - after");
                         databaseReference.child(itemName).removeValue();
-                    }
-                    else{
-                        Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
-                        productsList.set(productsIndexMap.get(itemName), currentProduct);
+                        refreashIndexMap();
+                        Log.i(TAG,"if- after after, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
+                    } else {
+                        Item currentProduct = new Item(itemName, values[1], Item.ITEM_TYPE.PRODUCT, values[0]);
+                        Log.i(TAG,"else - before, index: " + productsIndexMap.get(itemName) + " , size : " + itemsList.size());
+                        itemsList.set(productsIndexMap.get(itemName), currentProduct);
+                        Log.i(TAG,"else - after");
                     }
 
                     listItemAdapter = new ListItemAdapter(getActivity().getApplicationContext(),
-                            productsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
+                            itemsList, ListItemAdapter.VIEW_SOURCE.USER_SOURCE, (TableActivity) getActivity(), null);
                     listView.setAdapter(listItemAdapter);
                     listItemAdapter.notifyDataSetChanged();
                     ;
                 } catch (Exception ex) {
-                    Log.e(TAG, "UserOrderFragment: import items error :" + ex.getMessage());
+                    Log.e(TAG, "UserOrderFragment-onChildChange: import items error :" + ex.getMessage());
                 }
             }
 
@@ -218,17 +220,23 @@ public class UserOrderFragment extends Fragment {
         Picasso.with(getActivity().getApplicationContext()).load(userPhotoUrl).into(userProfilePic);
     }
 
+    public void refreashIndexMap() {
+        int currentIndex = 0;
+        for (Item currentItem : itemsList) {
+            productsIndexMap.put(currentItem.getName(), currentIndex);
+        }
+    }
+
 
     @Override
     public void onStop() {
         super.onStop();
         databaseReference.removeEventListener(listener);
-
     }
 
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        getItemsFromDB();
+        //getItemsFromDB();
     }
 
 

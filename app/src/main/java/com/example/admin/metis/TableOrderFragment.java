@@ -39,7 +39,7 @@ public class TableOrderFragment extends Fragment {
     private ListView listView;
     private ListItemAdapter listItemAdapter;
 
-    ArrayList<Product> productsList;
+    ArrayList<Item> productsList;
 
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
@@ -146,7 +146,7 @@ public class TableOrderFragment extends Fragment {
                     //Added the current item price to total price (multiply by the order amount of the specific item)
                     totalPrice += (Integer.parseInt(price)) * (Integer.parseInt(values[0]));
 
-                    Product currentProduct = new Product(itemName, values[1], Product.PRODUCT_TYPE.ITEM, values[0]);
+                    Item currentProduct = new Item(itemName, values[1], Item.ITEM_TYPE.PRODUCT, values[0]);
                     currentProduct.setUserImage(userPhotoUrl);
                     productsList.add(currentProduct);
 
