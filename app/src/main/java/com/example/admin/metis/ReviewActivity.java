@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ReviewActivity extends AppCompatActivity {
+
+    private static final String TAG = "Metis-Application: ";
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -41,7 +44,6 @@ public class ReviewActivity extends AppCompatActivity {
 
     }
 
-
     public void onStart(){
         super.onStart();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -53,9 +55,12 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        Intent intent = new Intent(ReviewActivity.this, MenuActivity.class);
-        startActivity(intent);
         finish();
+    }
+
+    public void onDestroy(){
+        super.onDestroy();
+        Log.i(TAG, "ReviewActivity : onDestory() callback has been called");
     }
 
 }

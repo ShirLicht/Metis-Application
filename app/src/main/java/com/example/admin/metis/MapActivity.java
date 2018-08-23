@@ -202,8 +202,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onBackPressed(){
         firebaseAuth.signOut();//log out from firebase
         LoginManager.getInstance().logOut();//log out from facebook
-        Intent intent = new Intent(MapActivity.this,MainActivity.class );
-        startActivity(intent);
+        finish();
     }
 
     @Override

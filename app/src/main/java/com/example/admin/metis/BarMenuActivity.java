@@ -65,8 +65,6 @@ public class BarMenuActivity extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        Intent intent = new Intent(BarMenuActivity.this, MenuActivity.class);
-        startActivity(intent);
         finish();
     }
 }

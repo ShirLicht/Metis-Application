@@ -139,8 +139,6 @@ public class TableActivity extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        Intent intent = new Intent(TableActivity.this, MenuActivity.class);
-        startActivity(intent);
         finish();
     }
 

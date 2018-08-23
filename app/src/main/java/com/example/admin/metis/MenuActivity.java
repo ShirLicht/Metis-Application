@@ -33,7 +33,6 @@ public class MenuActivity extends AppCompatActivity {
     private static final String USER_NAME_EXTRA = "userName";
     private static final String USER_IMAGE_EXTRA = "userImage";
     private static final String TABLE_NODE = "Tables";
-   // private static final String USER_ID = "userId";
 
     //UI Variables
     private Button menuBtn, tableBtn, chatBtn, logoutBtn;
@@ -71,6 +70,7 @@ public class MenuActivity extends AppCompatActivity {
         if(getIntent().getStringExtra(BAR_NAME_EXTRA) != null)
             BAR_NAME = getIntent().getStringExtra(BAR_NAME_EXTRA);
     }
+
     private void getUserInfo()
     {
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -188,8 +188,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void onBackPressed(){
         signOutUserFromBar();
-        Intent intent = new Intent(MenuActivity.this,MapActivity.class );
-        startActivity(intent);
+        finish();
     }
 
     @Override

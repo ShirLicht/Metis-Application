@@ -54,7 +54,7 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                 if(grantResults.length > 0){
                     boolean camreaAccapted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if(camreaAccapted){
-                        Toast.makeText(BarcodeActivity.this, "Permission is granted!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(BarcodeActivity.this, "Camera permission is granted!",Toast.LENGTH_LONG).show();
                     }
                     else{
                         Toast.makeText(BarcodeActivity.this, "Permission Denied!",Toast.LENGTH_LONG).show();
@@ -114,5 +114,9 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
     public void onDestroy(){
         super.onDestroy();
         scannerView.stopCamera();
+    }
+
+    public void onBackPressed(){
+        finish();
     }
 }
