@@ -1,5 +1,6 @@
 package com.example.admin.metis;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -61,5 +62,11 @@ public class BarMenuActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onBackPressed(){
+        Intent intent = new Intent(BarMenuActivity.this, MenuActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

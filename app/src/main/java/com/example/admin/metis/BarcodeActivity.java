@@ -93,6 +93,7 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
         Intent intent = new Intent(BarcodeActivity.this , TableActivity.class);
         intent.putExtra(FULL_TABLE_URL, scanReuslt);
         startActivity(intent);
+        finish();
     }
 
     public void onResume(){

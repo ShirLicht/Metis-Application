@@ -52,4 +52,10 @@ public class ReviewActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.chatActivity_tabs);
     }
 
+    public void onBackPressed(){
+        Intent intent = new Intent(ReviewActivity.this, MenuActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

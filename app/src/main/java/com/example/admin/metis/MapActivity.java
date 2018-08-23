@@ -59,7 +59,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private static final String DB_Url = "https://metis-application.firebaseio.com";
 
 
-
     //Firebase Variables
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseRef;

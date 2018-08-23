@@ -56,9 +56,10 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         getBarName();
         bindUI();
-        firebaseAuth = FirebaseAuth.getInstance();
         getUserInfo();
         setUIParams();
         signUserToBar();
@@ -145,7 +146,7 @@ public class MenuActivity extends AppCompatActivity {
         userProfilePic = findViewById(R.id.profile_image);
         logoutBtn = findViewById(R.id.SignOutBtn);
         barNameTxt = findViewById(R.id.barNameTxtView);
-        layout = (ConstraintLayout) findViewById(R.id.menuActivityLayout);
+        layout =  findViewById(R.id.menuActivityLayout);
     }
 
     public void btnEvents(){
